@@ -1,4 +1,3 @@
-@@ -0,0 +1,731 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,46 +8,65 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-height:100vh}
-.masthead{border-bottom:2px solid #1c1a16;padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between}
-.masthead-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:400;letter-spacing:-1px}
-.masthead-right{text-align:right}
-.date-lbl{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456;text-transform:uppercase;letter-spacing:.08em}
-.streak-badge{display:inline-flex;align-items:center;gap:5px;background:#FAEEDA;color:#633806;font-size:12px;font-weight:600;padding:4px 12px;border-radius:99px;margin-top:4px}
-.nav{display:flex;border-bottom:1px solid rgba(28,26,22,0.12);padding:0 2rem;background:#fff;overflow-x:auto}
+ 
+/* MASTHEAD */
+.masthead{border-bottom:2px solid #1c1a16;padding:1.5rem 2rem 1rem;text-align:center;position:relative}
+.masthead-name{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;letter-spacing:-2px;line-height:1}
+.masthead-sub{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456;letter-spacing:.2em;text-transform:uppercase;margin-top:6px}
+.masthead-left{position:absolute;left:2rem;top:50%;transform:translateY(-50%);text-align:left}
+.masthead-right{position:absolute;right:2rem;top:50%;transform:translateY(-50%);text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.date-lbl{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456;text-transform:uppercase;letter-spacing:.06em}
+.streak-badge{display:inline-flex;align-items:center;gap:5px;background:#FAEEDA;color:#633806;font-size:12px;font-weight:600;padding:4px 12px;border-radius:99px}
+.sync-dot{font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid rgba(28,26,22,0.2);color:#6b6456}
+.sync-dot.ok{border-color:#2d5a3d;color:#2d5a3d}
+.sync-dot.err{border-color:#c8603a;color:#c8603a}
+.motiv-line{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:#6b6456;margin-top:6px}
+ 
+/* NAV */
+.nav{display:flex;border-bottom:1px solid rgba(28,26,22,0.12);padding:0 2rem;background:#fff;overflow-x:auto;position:sticky;top:0;z-index:100}
 .nav::-webkit-scrollbar{display:none}
-.ntab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:12px 16px;border:none;background:transparent;color:#6b6456;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.ntab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:12px 16px;border:none;background:transparent;color:#6b6456;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .2s}
+.ntab:hover{color:#1c1a16}
 .ntab.on{color:#1c1a16;border-bottom-color:#1c1a16;font-weight:500}
-.page{max-width:960px;margin:0 auto;padding:1.5rem}
+ 
+/* PAGE */
+.page{max-width:980px;margin:0 auto;padding:1.5rem}
 .panel{display:none}.panel.on{display:block}
-.motiv-box{border-left:3px solid #c8603a;padding:12px 18px;background:#fff;border:1px solid rgba(200,96,58,0.2);border-left:3px solid #c8603a;margin-bottom:1.25rem;border-radius:2px}
-.motiv-q{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:#1c1a16;line-height:1.5}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(28,26,22,0.1);border:1px solid rgba(28,26,22,0.1);margin-bottom:1.25rem}
+ 
+/* CARDS */
+.card{background:#fff;border:1px solid rgba(28,26,22,0.08);padding:1.25rem;margin-bottom:1.25rem;border-radius:2px}
+.card-h{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#b0a898;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center}
+ 
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(28,26,22,0.08);border:1px solid rgba(28,26,22,0.08);margin-bottom:1.25rem}
 .met{background:#fff;padding:1.2rem 1.5rem;border-top:2px solid rgba(28,26,22,0.08)}
-.met.acc{border-top-color:#c8603a}.met.acc2{border-top-color:#2d5a3d}.met.gold{border-top-color:#c4973a}
-.met-l{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#b0a898;margin-bottom:6px}
+.met.acc{border-top-color:#c8603a}.met.acc2{border-top-color:#2d5a3d}.met.gold{border-top-color:#c4973a}.met.blue{border-top-color:#378ADD}
+.met-l{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#b0a898;margin-bottom:5px}
 .met-v{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#1c1a16;line-height:1}
 .met-s{font-size:11px;color:#6b6456;margin-top:4px}
+ 
+/* GRID */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
-.card{background:#fff;border:1px solid rgba(28,26,22,0.08);padding:1.25rem;margin-bottom:1.25rem}
-.card-h{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#b0a898;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem}
+ 
+/* PLANNING */
 .slot{display:grid;grid-template-columns:90px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid rgba(28,26,22,0.06)}
 .slot:last-child{border-bottom:none}
 .slot-time{font-family:'DM Mono',monospace;font-size:11px;color:#b0a898;padding-top:2px}
 .slot-label{font-size:13px;font-weight:500;color:#1c1a16}
 .slot-label.hl{color:#c8603a}
-.slot-sub{font-size:11px;color:#6b6456;margin-top:2px}
-.slot-neuro{font-size:10px;color:#b0a898;font-style:italic;margin-top:2px}
+.slot-sub{font-size:11px;color:#6b6456;margin-top:1px}
+.slot-neuro{font-size:10px;color:#b0a898;font-style:italic;margin-top:1px}
+ 
+/* CHECKS */
 .ci{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(28,26,22,0.06)}
 .ci:last-child{border-bottom:none}
-.cb{width:20px;height:20px;min-width:20px;border:1px solid rgba(28,26,22,0.2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;font-size:12px;border-radius:2px}
+.cb{width:20px;height:20px;min-width:20px;border:1px solid rgba(28,26,22,0.25);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;font-size:12px;border-radius:2px;transition:all .15s}
 .cb.done{background:#2d5a3d;border-color:#2d5a3d;color:#fff}
 .ci-label{font-size:13px;font-weight:500}
 .ci-sub{font-size:11px;color:#6b6456;margin-top:2px}
-.pw{margin-bottom:12px}
-.ph{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;color:#1c1a16}
-.ph span:last-child{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456}
-.pbar{height:5px;background:#f0efe9;border-radius:99px;overflow:hidden}
-.pfill{height:100%;border-radius:99px;transition:width .5s}
+ 
+/* CANDIDATURES */
 .cand-item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(28,26,22,0.06)}
 .cand-item:last-child{border-bottom:none}
 .cand-name{font-size:13px;font-weight:500;font-family:'Playfair Display',serif}
@@ -59,87 +77,174 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
 .s-relance{border-color:#c4973a;color:#c4973a}
 .s-entretien{border-color:#2d5a3d;color:#2d5a3d}
 .s-refus{border-color:#b0a898;color:#b0a898}
-.del-btn{background:none;border:none;cursor:pointer;color:#b0a898;font-size:12px;padding:0}
+.del-btn{background:none;border:none;cursor:pointer;color:#b0a898;font-size:13px;padding:2px 6px}
 .del-btn:hover{color:#c8603a}
+ 
+/* SPORT */
 .sport-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(28,26,22,0.06)}
 .sport-row:last-child{border-bottom:none}
 .sport-date{font-family:'DM Mono',monospace;font-size:11px;color:#b0a898;width:90px;flex-shrink:0}
 .sport-info{flex:1}
 .sport-km{font-size:13px;font-weight:500}
 .sport-type{font-size:11px;color:#6b6456}
-.sport-bar{height:4px;background:#f0efe9;flex:1;border-radius:99px;overflow:hidden}
+.sport-bar{height:4px;background:#f0efe9;width:80px;border-radius:99px;overflow:hidden}
 .sport-fill{height:100%;background:#2d5a3d;border-radius:99px}
+ 
+/* PROG BARS */
+.pw{margin-bottom:11px}
+.ph{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.ph span:last-child{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456}
+.pbar{height:5px;background:#f0efe9;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .5s}
+ 
+/* CALENDRIER */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.cal-nav button{background:none;border:1px solid rgba(28,26,22,0.2);padding:5px 12px;cursor:pointer;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;color:#6b6456}
+.cal-nav button:hover{background:#f0efe9}
+.cal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:400}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-header{font-family:'DM Mono',monospace;font-size:10px;text-align:center;color:#b0a898;padding:4px;letter-spacing:.05em}
+.cal-day{min-height:70px;background:#fff;border:1px solid rgba(28,26,22,0.06);padding:5px;cursor:pointer;transition:all .15s;border-radius:2px}
+.cal-day:hover{border-color:#1c1a16}
+.cal-day.today{border-color:#c8603a;background:#fff9f7}
+.cal-day.selected{border-color:#1c1a16;background:#f5f4f0}
+.cal-day.other-month{opacity:.4}
+.cal-day-num{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456;margin-bottom:3px}
+.cal-day.today .cal-day-num{color:#c8603a;font-weight:600}
+.cal-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin:1px}
+.cal-dot.cand{background:#c8603a}.cal-dot.sport{background:#2d5a3d}.cal-dot.check{background:#c4973a}
+ 
+/* VUE SEMAINE */
+.week-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.week-nav button{background:none;border:1px solid rgba(28,26,22,0.2);padding:5px 12px;cursor:pointer;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;color:#6b6456}
+.week-nav button:hover{background:#f0efe9}
+.week-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:400}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.week-col{background:#fff;border:1px solid rgba(28,26,22,0.06);padding:10px;border-radius:2px;min-height:120px}
+.week-col.today{border-color:#c8603a}
+.week-day-name{font-family:'DM Mono',monospace;font-size:10px;color:#b0a898;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.week-day-num{font-family:'Playfair Display',serif;font-size:18px;color:#1c1a16;margin-bottom:6px}
+.week-col.today .week-day-num{color:#c8603a}
+.week-event{font-size:10px;padding:2px 5px;border-radius:2px;margin-bottom:2px;line-height:1.3}
+.week-event.cand{background:#FAECE7;color:#993C1D}
+.week-event.sport{background:#E1F5EE;color:#0F6E56}
+.week-event.check{background:#FAEEDA;color:#633806}
+ 
+/* FORMULAIRES */
 .ar{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.inp{font-size:13px;padding:8px 10px;border:1px solid rgba(28,26,22,0.15);background:#f5f4f0;color:#1c1a16;font-family:'DM Sans',sans-serif;outline:none;border-radius:2px}
-.inp:focus{border-color:#1c1a16}
+.inp{font-size:13px;padding:8px 10px;border:1px solid rgba(28,26,22,0.15);background:#f5f4f0;color:#1c1a16;font-family:'DM Sans',sans-serif;outline:none;border-radius:2px;transition:border .15s}
+.inp:focus{border-color:#1c1a16;background:#fff}
 .inp.w{flex:1;min-width:100px}
 .inp.n{width:70px}
-.btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:8px 16px;border:1px solid #1c1a16;background:transparent;color:#1c1a16;cursor:pointer;border-radius:2px;white-space:nowrap}
+.btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:8px 16px;border:1px solid #1c1a16;background:transparent;color:#1c1a16;cursor:pointer;border-radius:2px;white-space:nowrap;transition:all .15s}
 .btn:hover{background:#1c1a16;color:#faf9f6}
-.btn.primary{background:#1c1a16;color:#faf9f6}
-.btn.primary:hover{opacity:.85}
+.btn.p{background:#1c1a16;color:#faf9f6}
+.btn.p:hover{opacity:.85}
+.btn.g{background:#2d5a3d;border-color:#2d5a3d;color:#fff}
+.btn.g:hover{opacity:.85}
+.btn.a{background:#c4973a;border-color:#c4973a;color:#fff}
+.btn.r{background:#6b6456;border-color:#6b6456;color:#fff}
 .note-area{width:100%;margin-top:10px;font-size:13px;padding:10px;border:1px solid rgba(28,26,22,0.15);background:#f5f4f0;color:#1c1a16;font-family:'DM Sans',sans-serif;resize:vertical;min-height:60px;outline:none;line-height:1.6;border-radius:2px}
-.note-area:focus{border-color:#1c1a16}
-.heatmap{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
-.hm-d{width:13px;height:13px;background:#f0efe9;border-radius:2px}
-.hm-d.l1{background:#a8d5b8}.hm-d.l2{background:#5daa7a}.hm-d.l3{background:#2d7a4a}.hm-d.l4{background:#2d5a3d}
+.note-area:focus{border-color:#1c1a16;background:#fff}
+.feedback{font-size:12px;color:#2d5a3d;margin-top:8px;padding:6px 10px;background:#E1F5EE;border-radius:2px;display:none}
+ 
+/* PROGRAMMES */
+.ptab-nav{display:flex;gap:0;border-bottom:1px solid rgba(28,26,22,0.1);margin-bottom:1.25rem;flex-wrap:wrap}
+.ptab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:8px 14px;background:transparent;border:none;cursor:pointer;color:#6b6456;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.ptab.on{color:#1c1a16;border-bottom-color:#c8603a}
 .week-block{padding-left:16px;border-left:1px solid rgba(28,26,22,0.12);margin-bottom:18px}
 .week-block.now{border-left:2px solid #2d5a3d}
 .week-n{font-family:'DM Mono',monospace;font-size:10px;color:#b0a898;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .now-pill{background:#2d5a3d;color:#fff;font-size:9px;padding:2px 6px;border-radius:2px}
-.week-title{font-family:'Playfair Display',serif;font-size:14px;margin-bottom:5px}
+.week-prog-title{font-family:'Playfair Display',serif;font-size:14px;margin-bottom:5px}
 .week-items{list-style:none}
 .week-items li{font-size:12px;color:#6b6456;padding:2px 0 2px 12px;position:relative;line-height:1.5}
 .week-items li::before{content:'·';position:absolute;left:0;color:#b0a898}
-.ptab-nav{display:flex;gap:0;border-bottom:1px solid rgba(28,26,22,0.1);margin-bottom:1.25rem;flex-wrap:wrap}
-.ptab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:8px 14px;background:transparent;border:none;cursor:pointer;color:#6b6456;border-bottom:2px solid transparent;margin-bottom:-1px}
-.ptab.on{color:#1c1a16;border-bottom-color:#c8603a}
-.chat-msg{display:flex;margin-bottom:10px}
-.chat-msg.user{justify-content:flex-end}
-.chat-bubble{max-width:80%;padding:10px 14px;font-size:13px;line-height:1.5;border-radius:2px}
-.chat-msg.user .chat-bubble{background:#1c1a16;color:#faf9f6}
-.chat-msg.bot .chat-bubble{background:#fff;border:1px solid rgba(28,26,22,0.1);color:#1c1a16}
-.chat-msg.act .chat-bubble{background:#f0f8f4;border:1px solid #2d5a3d;color:#1c1a16}
-.sync-dot{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid rgba(28,26,22,0.2);color:#6b6456}
-.sync-dot.ok{border-color:#2d5a3d;color:#2d5a3d}
-.sync-dot.err{border-color:#c8603a;color:#c8603a}
-@media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.masthead{flex-direction:column;gap:8px}.masthead-title{font-size:28px}}
+ 
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,26,22,0.5);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.on{display:flex}
+.modal{background:#fff;padding:1.5rem;border-radius:4px;width:90%;max-width:480px;max-height:80vh;overflow-y:auto}
+.modal-h{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:#6b6456;padding:0 4px}
+ 
+/* HEATMAP */
+.heatmap{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
+.hm-d{width:13px;height:13px;background:#f0efe9;border-radius:2px;cursor:pointer}
+.hm-d:hover{opacity:.8}
+.hm-d.l1{background:#a8d5b8}.hm-d.l2{background:#5daa7a}.hm-d.l3{background:#2d7a4a}.hm-d.l4{background:#2d5a3d}
+ 
+@media(max-width:768px){
+  .metrics{grid-template-columns:1fr 1fr}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .masthead-left,.masthead-right{position:static;transform:none;text-align:center}
+  .masthead{padding:1rem}
+  .masthead-name{font-size:32px}
+  .week-grid{grid-template-columns:repeat(7,1fr);gap:3px}
+  .week-col{padding:5px;min-height:80px}
+  .week-event{display:none}
+}
 </style>
 </head>
 <body>
-
+ 
 <div class="masthead">
-  <div>
-    <div class="masthead-title">Giovana 2026</div>
-    <div style="font-size:11px;color:#6b6456;font-style:italic;margin-top:3px" id="motiv-line"></div>
-  </div>
-  <div class="masthead-right">
+  <div class="masthead-left">
     <div class="date-lbl" id="date-lbl"></div>
-    <div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end;align-items:center">
-      <div class="sync-dot" id="sync-dot">● Connexion...</div>
-      <div class="streak-badge">🔥 <span id="streak-val">0</span> jours</div>
+    <div style="margin-top:8px;display:flex;align-items:center;gap:6px">
+      <input type="text" id="motiv-input" 
+        style="flex:1;font-size:13px;font-style:italic;font-family:'Playfair Display',serif;background:transparent;border:none;border-bottom:1px solid rgba(28,26,22,0.15);padding:4px 0;color:#6b6456;outline:none;width:100%"
+        placeholder="Ta citation du moment..."
+        oninput="saveMotivLive(this.value)"
+        onfocus="this.style.borderBottomColor='#1c1a16'"
+        onblur="this.style.borderBottomColor='rgba(28,26,22,0.15)'">
+      <button onclick="resetMotiv()" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:10px;font-family:DM Mono,monospace;white-space:nowrap" title="Citation automatique">↺ auto</button>
     </div>
   </div>
+  <div>
+    <div class="masthead-name">Giovana</div>
+    <div class="masthead-sub">Objectifs & Progression 2026</div>
+  </div>
+  <div class="masthead-right">
+    <div class="sync-dot" id="sync-dot">● Connexion...</div>
+    <div class="streak-badge">🔥 <span id="streak-val">0</span> jours</div>
+  </div>
 </div>
-
+ 
 <div class="nav">
   <button class="ntab on" onclick="goPanel('today',this)">Aujourd'hui</button>
-  <button class="ntab" onclick="goPanel('programme',this)">Programmes</button>
+  <button class="ntab" onclick="goPanel('semaine',this)">Semaine</button>
+  <button class="ntab" onclick="goPanel('calendrier',this)">Calendrier</button>
   <button class="ntab" onclick="goPanel('cand',this)">Candidatures</button>
   <button class="ntab" onclick="goPanel('sport',this)">Sport</button>
-  <button class="ntab" onclick="goPanel('prog',this)">Progression</button>
-  <button class="ntab" onclick="goPanel('chat',this)" style="color:#c8603a">Assistant</button>
+  <button class="ntab" onclick="goPanel('programme',this)">Programmes</button>
+  <button class="ntab" onclick="goPanel('progression',this)">Progression</button>
 </div>
-
+ 
 <div class="page">
-
+ 
+<!-- AUJOURD'HUI -->
 <div class="panel on" id="panel-today">
-  <div class="motiv-box" id="motiv-box"><div class="motiv-q" id="motiv-q"></div></div>
   <div class="metrics" id="metrics"></div>
   <div class="grid2">
     <div>
       <div class="card">
-        <div class="card-h"><span>Planning neuroscience</span><span id="day-label"></span></div>
+        <div class="card-h">
+          <span>Planning — <span id="day-label"></span></span>
+          <button class="btn" style="font-size:10px;padding:3px 8px" onclick="toggleAddSlot()">+ Bloc</button>
+        </div>
+        <div id="add-slot-form" style="display:none;margin-bottom:10px;padding:10px;background:#f5f4f0;border-radius:2px">
+          <div class="ar" style="margin-top:0">
+            <input class="inp" type="text" id="ns-time" placeholder="Horaire (ex: 19h-20h)" style="width:130px">
+            <input class="inp w" type="text" id="ns-label" placeholder="Activite *">
+            <input class="inp w" type="text" id="ns-sub" placeholder="Description">
+          </div>
+          <div class="ar">
+            <label style="font-size:12px;display:flex;align-items:center;gap:4px"><input type="checkbox" id="ns-hl"> Mettre en evidence</label>
+            <button class="btn p" style="font-size:11px;padding:5px 12px" onclick="addSlot()">+ Ajouter</button>
+            <button class="btn" style="font-size:11px;padding:5px 12px" onclick="toggleAddSlot()">Annuler</button>
+          </div>
+        </div>
         <div id="today-slots"></div>
       </div>
       <div class="card">
@@ -148,45 +253,93 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
       </div>
     </div>
     <div class="card">
-      <div class="card-h">Tâches du jour</div>
+      <div class="card-h">
+        <span>Tâches du jour</span>
+        <button class="btn" style="font-size:10px;padding:3px 8px" onclick="toggleAddTask()">+ Tâche</button>
+      </div>
+      <div id="add-task-form" style="display:none;margin-bottom:10px;padding:10px;background:#f5f4f0;border-radius:2px">
+        <div class="ar" style="margin-top:0">
+          <input class="inp w" type="text" id="nt-label" placeholder="Nom de la tâche *">
+          <input class="inp w" type="text" id="nt-sub" placeholder="Description">
+          <button class="btn p" style="font-size:11px;padding:5px 12px" onclick="addCustomTask()">+ Ajouter</button>
+          <button class="btn" style="font-size:11px;padding:5px 12px" onclick="toggleAddTask()">Annuler</button>
+        </div>
+      </div>
       <div id="today-checks"></div>
     </div>
   </div>
 </div>
-
-<div class="panel" id="panel-programme">
-  <div class="ptab-nav" id="ptabs"></div>
-  <div id="prog-body"></div>
+ 
+<!-- SEMAINE -->
+<div class="panel" id="panel-semaine">
+  <div class="week-nav">
+    <button onclick="changeWeek(-1)">← Semaine préc.</button>
+    <span class="week-title" id="week-title"></span>
+    <button onclick="changeWeek(1)">Semaine suiv. →</button>
+  </div>
+  <div class="week-grid" id="week-grid"></div>
+  <div class="card" style="margin-top:1.25rem">
+    <div class="card-h">Résumé de la semaine</div>
+    <div id="week-summary"></div>
+  </div>
 </div>
-
+ 
+<!-- CALENDRIER -->
+<div class="panel" id="panel-calendrier">
+  <div class="cal-nav">
+    <button onclick="changeMonth(-1)">← Mois préc.</button>
+    <span class="cal-title" id="cal-title"></span>
+    <button onclick="changeMonth(1)">Mois suiv. →</button>
+  </div>
+  <div class="cal-grid" id="cal-grid"></div>
+  <div class="card" style="margin-top:1.25rem" id="cal-detail" style="display:none">
+    <div class="card-h" id="cal-detail-title">Sélectionne un jour</div>
+    <div id="cal-detail-content"><div style="font-size:13px;color:#b0a898;text-align:center;padding:1rem">Clique sur un jour pour voir les détails</div></div>
+  </div>
+</div>
+ 
+<!-- CANDIDATURES -->
 <div class="panel" id="panel-cand">
   <div class="metrics" id="cand-metrics"></div>
   <div class="card">
     <div class="card-h">Nouvelle candidature</div>
     <div class="ar">
-      <input class="inp w" type="text" id="c-name" placeholder="Entreprise">
+      <input class="inp w" type="text" id="c-name" placeholder="Entreprise *">
       <input class="inp w" type="text" id="c-poste" placeholder="Poste">
-      <select id="c-type" class="inp"><option>CDI</option><option>Intérim</option><option>Freelance</option><option>Stage</option></select>
+      <select id="c-type" class="inp"><option>CDI</option><option>Intérim</option><option>Freelance</option><option>Stage</option><option>CDD</option></select>
+      <select id="c-status" class="inp">
+        <option value="envoyee">Envoyée</option>
+        <option value="entretien">Entretien</option>
+        <option value="relance">Relance</option>
+        <option value="refus">Refus</option>
+      </select>
     </div>
     <div class="ar">
-      <input class="inp w" type="text" id="c-notes" placeholder="Notes / source">
+      <input class="inp w" type="text" id="c-notes" placeholder="Notes (contact, source, lien offre…)">
       <input class="inp" type="date" id="c-date" style="width:130px">
-      <input class="inp" type="text" id="c-sal" placeholder="Salaire" style="width:90px">
-      <button class="btn primary" onclick="addCand()">+ Ajouter</button>
+      <input class="inp" type="text" id="c-sal" placeholder="Salaire" style="width:100px">
+      <button class="btn p" onclick="addCand()">+ Ajouter</button>
     </div>
+    <div class="feedback" id="c-feedback"></div>
   </div>
   <div class="card" style="margin-top:0">
     <div class="card-h">
-      <span id="cand-count"></span>
-      <select id="cand-filter" onchange="renderCands()" class="inp" style="font-size:11px;padding:3px 7px">
-        <option value="all">Toutes</option><option value="envoyee">Envoyées</option>
-        <option value="relance">Relance</option><option value="entretien">Entretien</option><option value="refus">Refus</option>
-      </select>
+      <span id="cand-count">Candidatures</span>
+      <div style="display:flex;gap:6px">
+        <select id="cand-filter" onchange="renderCands()" class="inp" style="font-size:11px;padding:3px 7px">
+          <option value="all">Toutes</option><option value="envoyee">Envoyées</option>
+          <option value="relance">Relance</option><option value="entretien">Entretien</option><option value="refus">Refus</option>
+        </select>
+        <select id="cand-sort" onchange="renderCands()" class="inp" style="font-size:11px;padding:3px 7px">
+          <option value="recent">Récentes</option><option value="alpha">A-Z</option><option value="status">Statut</option>
+        </select>
+      </div>
     </div>
     <div id="cand-list"></div>
   </div>
 </div>
-
+ 
+<!-- SPORT -->
 <div class="panel" id="panel-sport">
   <div class="metrics" id="sport-metrics"></div>
   <div class="grid2">
@@ -194,104 +347,162 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
       <div class="card-h">Ajouter une séance</div>
       <div class="ar">
         <input class="inp n" type="number" id="s-km" placeholder="km" min="0" step="0.1">
-        <select id="s-type" class="inp" style="flex:1"><option>Run Z2</option><option>Run fractionné</option><option>Run long</option><option>Renfo bas</option><option>Abs/Gainage</option><option>Marche</option></select>
+        <select id="s-type" class="inp" style="flex:1"><option>Run Z2</option><option>Run fractionné</option><option>Run long</option><option>Renfo bas</option><option>Abs/Gainage</option><option>Marche</option><option>Repos actif</option></select>
         <input class="inp" type="date" id="s-date" style="width:130px">
       </div>
       <div class="ar">
-        <input class="inp w" type="text" id="s-note" placeholder="FC, ressenti, allure…">
-        <button class="btn primary" onclick="addSport()">+ Ajouter</button>
+        <input class="inp w" type="text" id="s-note" placeholder="FC moy, ressenti, allure…">
+        <button class="btn p" onclick="addSport()">+ Ajouter</button>
       </div>
+      <div class="feedback" id="s-feedback"></div>
     </div>
     <div class="card">
-      <div class="card-h">Objectifs</div>
+      <div class="card-h">Objectifs sport</div>
       <div class="pw"><div class="ph"><span>10km en moins d'1h</span><span id="p10k-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-10k" style="background:#2d5a3d"></div></div><div style="font-size:11px;color:#b0a898;margin-top:3px">Record : <strong style="color:#1c1a16">1h22</strong> → cible : <strong style="color:#2d5a3d">1h00</strong></div></div>
-      <div class="pw"><div class="ph"><span>6-pack</span><span id="p6p-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-6p" style="background:#c8603a"></div></div></div>
+      <div class="pw"><div class="ph"><span>6-pack (recomposition)</span><span id="p6p-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-6p" style="background:#c8603a"></div></div></div>
       <div class="pw"><div class="ph"><span>Volume mensuel</span><span id="pvol-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-vol" style="background:#c4973a"></div></div></div>
     </div>
   </div>
-  <div class="card"><div class="card-h">Historique</div><div id="sport-list"></div></div>
+  <div class="card"><div class="card-h">Historique séances</div><div id="sport-list"></div></div>
 </div>
-
-<div class="panel" id="panel-prog">
-  <div class="card"><div class="card-h">Progression globale</div><div id="all-prog"></div></div>
+ 
+<!-- PROGRAMMES -->
+<div class="panel" id="panel-programme">
+  <div class="ptab-nav" id="ptabs"></div>
+  <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+    <button class="btn" style="font-size:10px;padding:4px 10px" onclick="toggleAddProgWeek()">+ Ajouter une semaine</button>
+    <button class="btn" style="font-size:10px;padding:4px 10px" onclick="toggleAddProgItem()">+ Ajouter une tâche</button>
+  </div>
+  <div id="add-prog-week-form" style="display:none;margin-bottom:12px;padding:12px;background:#f5f4f0;border-radius:2px">
+    <div class="card-h" style="margin-bottom:8px">Nouvelle semaine au programme actuel</div>
+    <div class="ar" style="margin-top:0">
+      <input class="inp" type="text" id="pw-n" placeholder="Ex: S6 - 16/06" style="width:140px">
+      <input class="inp w" type="text" id="pw-title" placeholder="Titre de la semaine *">
+      <button class="btn p" style="font-size:11px;padding:5px 12px" onclick="addProgWeek()">+ Ajouter</button>
+      <button class="btn" style="font-size:11px;padding:5px 12px" onclick="toggleAddProgWeek()">Annuler</button>
+    </div>
+  </div>
+  <div id="add-prog-item-form" style="display:none;margin-bottom:12px;padding:12px;background:#f5f4f0;border-radius:2px">
+    <div class="card-h" style="margin-bottom:8px">Nouvelle tâche dans la semaine actuelle</div>
+    <div class="ar" style="margin-top:0">
+      <input class="inp w" type="text" id="pi-text" placeholder="Description de la tâche *">
+      <button class="btn p" style="font-size:11px;padding:5px 12px" onclick="addProgItem()">+ Ajouter</button>
+      <button class="btn" style="font-size:11px;padding:5px 12px" onclick="toggleAddProgItem()">Annuler</button>
+    </div>
+  </div>
+  <div id="prog-body"></div>
+</div>
+ 
+<!-- PROGRESSION -->
+<div class="panel" id="panel-progression">
+  <div class="card">
+    <div class="card-h">
+      <span>Progression globale</span>
+      <button class="btn" style="font-size:10px;padding:3px 8px" onclick="toggleAddProg()">+ Objectif</button>
+    </div>
+    <div id="add-prog-form" style="display:none;margin-bottom:10px;padding:10px;background:#f5f4f0;border-radius:2px">
+      <div class="ar" style="margin-top:0">
+        <input class="inp w" type="text" id="np-label" placeholder="Nom objectif *">
+        <input class="inp" type="number" id="np-val" placeholder="% actuel" min="0" max="100" style="width:90px">
+        <input class="inp w" type="text" id="np-note" placeholder="Note (ex: 3/10 modules)">
+        <input class="inp" type="color" id="np-col" value="#2d5a3d" style="width:50px;padding:4px">
+        <button class="btn p" style="font-size:11px;padding:5px 12px" onclick="addProgObj()">+ Ajouter</button>
+        <button class="btn" style="font-size:11px;padding:5px 12px" onclick="toggleAddProg()">Annuler</button>
+      </div>
+    </div>
+    <div id="all-prog"></div>
+  </div>
   <div class="card">
     <div class="card-h">Activité — 12 semaines</div>
     <div class="heatmap" id="heatmap"></div>
-  </div>
-</div>
-
-<div class="panel" id="panel-chat">
-  <div class="card" style="margin-bottom:12px">
-    <div class="card-h">Comment utiliser</div>
-    <div style="font-size:12px;color:#6b6456;line-height:2">
-      "Entretien chez LTD pour chargée de production intérim 45K"<br>
-      "Candidature Jacquemus CDI styliste" · "Refus de Carven"<br>
-      "Run 8km" · "Renfo abs" · "Relance Undiz"
+    <div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:10px;font-family:'DM Mono',monospace;color:#b0a898">
+      Moins <div style="width:11px;height:11px;background:#f0efe9;border-radius:2px"></div>
+      <div style="width:11px;height:11px;background:#a8d5b8;border-radius:2px"></div>
+      <div style="width:11px;height:11px;background:#5daa7a;border-radius:2px"></div>
+      <div style="width:11px;height:11px;background:#2d5a3d;border-radius:2px"></div>
+      Plus
     </div>
   </div>
-  <div id="chat-messages" style="min-height:200px;max-height:400px;overflow-y:auto;margin-bottom:12px"></div>
-  <div style="display:flex;gap:8px">
-    <input class="inp w" type="text" id="chat-input" placeholder="Dis-moi ce qui se passe..." onkeydown="if(event.key==='Enter')sendChat()">
-    <button class="btn primary" onclick="sendChat()">Envoyer</button>
+</div>
+ 
+</div>
+ 
+  <!-- TACHES NON COCHEES AUJOURD'HUI -->
+  <div class="card" id="unchecked-card">
+    <div class="card-h">Tâches pas encore cochées aujourd'hui</div>
+    <div id="unchecked-today"></div>
+  </div>
+ 
+  <!-- HISTORIQUE 30 JOURS PAR TACHE -->
+  <div class="card">
+    <div class="card-h">Complétion par tâche — 30 derniers jours</div>
+    <div id="task-history"></div>
+  </div>
+ 
+<!-- MODAL JOUR -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-h"><span id="modal-title">Lundi 12 mai</span><button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('on')">✕</button></div>
+    <div id="modal-content"></div>
+    <div style="margin-top:1rem">
+      <div class="card-h" style="margin-bottom:8px">Note de ce jour</div>
+      <textarea class="note-area" id="modal-note" placeholder="Ajouter une note pour ce jour…" oninput="saveModalNote(this.value)" style="margin-top:0;min-height:80px"></textarea>
+    </div>
   </div>
 </div>
-
-</div>
-
+ 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 var SURL = 'https://culyvwdsmpfkmpttatax.supabase.co';
 var SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bHl2d2RzbXBma21wdHRhdGF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0Nzg3OTgsImV4cCI6MjA5NDA1NDc5OH0.V_VgsigcLVWLdTETrW71Exn5njz37y-KMekK4_9-G_c';
 var sb = supabase.createClient(SURL, SKEY);
 var UID = 'giovana_2026';
-
-var D = { checks:{}, notes:{}, streak:0, lastActive:'', candidatures:[], sport:[] };
-
-function fmt(d) { return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
-function todayKey() { return fmt(new Date()); }
-function todayIdx() { var d = new Date().getDay(); return d===0?6:d-1; }
-var DLABELS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-
-function setSyncStatus(s) {
-  var el = document.getElementById('sync-dot');
-  if(!el) return;
+var D = {checks:{},notes:{},streak:0,lastActive:'',candidatures:[],sport:[]};
+var currentWeekOffset = 0;
+var currentMonth = new Date();
+var selectedDay = null;
+var selectedDayKey = null;
+var currentProg = 'data';
+ 
+function fmt(d){return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'});}
+function todayKey(){return fmt(new Date());}
+function todayIdx(){var d=new Date().getDay();return d===0?6:d-1;}
+var DL=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+ 
+function setSyncStatus(s){
+  var el=document.getElementById('sync-dot');if(!el)return;
   if(s==='ok'){el.className='sync-dot ok';el.textContent='● Synchronisé';}
   else if(s==='err'){el.className='sync-dot err';el.textContent='● Hors ligne';}
   else{el.className='sync-dot';el.textContent='● Connexion...';}
 }
-
-async function loadDB() {
+ 
+async function loadDB(){
   setSyncStatus('load');
-  try {
-    var res = await sb.from('dashboard_data').select('*').eq('user_id',UID).single();
-    if(res.data) {
-      D = Object.assign({}, D, JSON.parse(res.data.payload));
-    } else {
-      D.candidatures = defaultCands();
-      D.sport = defaultSport();
-      await saveDB();
-    }
+  try{
+    var res=await sb.from('dashboard_data').select('*').eq('user_id',UID).single();
+    if(res.data){D=Object.assign({},D,JSON.parse(res.data.payload));}
+    else{D.candidatures=defaultCands();D.sport=defaultSport();await saveDB();}
     setSyncStatus('ok');
-  } catch(e) {
+  }catch(e){
     setSyncStatus('err');
-    var local = localStorage.getItem('db26');
-    if(local) D = Object.assign({}, D, JSON.parse(local));
-    else { D.candidatures = defaultCands(); D.sport = defaultSport(); }
+    var local=localStorage.getItem('db26');
+    if(local)D=Object.assign({},D,JSON.parse(local));
+    else{D.candidatures=defaultCands();D.sport=defaultSport();}
   }
   renderAll();
 }
-
-async function saveDB() {
-  setSyncStatus('load');
-  try {
-    await sb.from('dashboard_data').upsert({user_id:UID, payload:JSON.stringify(D), updated_at:new Date().toISOString()}, {onConflict:'user_id'});
+ 
+async function saveDB(){
+  try{
+    await sb.from('dashboard_data').upsert({user_id:UID,payload:JSON.stringify(D),updated_at:new Date().toISOString()},{onConflict:'user_id'});
     setSyncStatus('ok');
-  } catch(e) { setSyncStatus('err'); }
-  localStorage.setItem('db26', JSON.stringify(D));
+  }catch(e){setSyncStatus('err');}
+  localStorage.setItem('db26',JSON.stringify(D));
 }
-
-function defaultCands() { return [
-  {id:1,name:'LTD',poste:'Dev. Denim',type:'Freelance',status:'entretien',notes:'',date:'13/04/2026',sal:''},
+ 
+function defaultCands(){return[
+  {id:1,name:'LTD',poste:'Dev. Denim',type:'Freelance',status:'entretien',notes:'Chargee de production interim',date:'13/04/2026',sal:'45K'},
   {id:2,name:'Carven',poste:'',type:'CDI',status:'envoyee',notes:'',date:'13/04/2026',sal:''},
   {id:3,name:'KEIT',poste:'',type:'CDI',status:'entretien',notes:'',date:'18/04/2026',sal:''},
   {id:4,name:'Undiz',poste:'Acheteuse',type:'CDI',status:'envoyee',notes:'',date:'20/04/2026',sal:''},
@@ -301,18 +512,17 @@ function defaultCands() { return [
   {id:8,name:'Atelier Marey',poste:'Styliste freelance',type:'Freelance',status:'envoyee',notes:'',date:'04/05/2026',sal:''},
   {id:9,name:'ERES',poste:'Acheteuse',type:'CDI',status:'envoyee',notes:'',date:'05/05/2026',sal:''},
   {id:10,name:'Le Slip Francais',poste:'Chargee de production',type:'CDI',status:'envoyee',notes:'',date:'05/05/2026',sal:''},
-]; }
-
-function defaultSport() { return [
+];}
+function defaultSport(){return[
   {id:1,date:'15/04/2026',km:7,type:'Run Z2',note:''},
   {id:2,date:'16/04/2026',km:7,type:'Run Z2',note:''},
   {id:3,date:'18/04/2026',km:10,type:'Run long',note:''},
   {id:4,date:'05/05/2026',km:0,type:'Renfo bas',note:''},
-]; }
-
-var MOTIVS = [
+];}
+ 
+var MOTIVS=[
   'Chaque seance est une brique de la personne que tu construis.',
-  'Le 10km en 1h se construit zone 2 par zone 2.',
+  'Le 10km en 1h se construit zone 2 par zone 2. FC<154 bpm.',
   '2 candidatures par jour. La prochaine est peut-etre la bonne.',
   'L italien 20 min par jour. Dans 6 mois tu seras fluente.',
   'CLO 3D + Valentina = double competence rare dans la mode.',
@@ -320,13 +530,13 @@ var MOTIVS = [
   'La couture est ton ancre creative. Protege ce temps.',
   'L IA que tu apprends aujourd hui sera ton super-pouvoir.'
 ];
-
-var SLOTS = [
-  {time:'9h30-10h00',label:'Anthropic Academy',sub:'30 min - module du jour',neuro:'Pic de cortisol = attention max.',hl:true},
-  {time:'10h00-11h30',label:'Data - Power BI / SQL',sub:'90 min - cycle ultradien',neuro:'90 min = concentration profonde naturelle.',hl:false},
-  {time:'11h30-11h50',label:'Pause consolidation',sub:'20 min - pas d ecran',neuro:'L hippocampe encode ce que tu viens d apprendre.',hl:false},
-  {time:'11h50-12h20',label:'Italien - repetition espacee',sub:'30 min - Duolingo + Anki',neuro:'Double encodage matin + soir = retention x3.',hl:false},
-  {time:'13h00-14h00',label:'Dejeuner + sieste 20 min',sub:'Deconnexion totale',neuro:'Power nap = +34% performance (NASA).',hl:false},
+ 
+var SLOTS=[
+  {time:'9h30-10h00',label:'Anthropic Academy',sub:'30 min - module du jour',neuro:'Pic de cortisol = attention max. Nouveaute = dopamine.',hl:true},
+  {time:'10h00-11h30',label:'Data - Power BI / SQL',sub:'90 min - Pomodoro 25+5x3',neuro:'90 min = 1 cycle ultradien complet.',hl:false},
+  {time:'11h30-11h50',label:'Pause consolidation',sub:'20 min - marche, pas d ecran',neuro:'L hippocampe encode ce que tu viens d apprendre.',hl:false},
+  {time:'11h50-12h20',label:'Italien - repetition espacee',sub:'30 min - Duolingo + Anki',neuro:'Double encodage matin+soir = retention x3.',hl:false},
+  {time:'13h00-14h00',label:'Dejeuner + sieste 20 min',sub:'Deconnexion totale',neuro:'Power nap 20 min = +34% performance (NASA).',hl:false},
   {time:'14h00-15h30',label:'3D / Modelisme CLO',sub:'90 min - Valentina + CLO',neuro:'14h-16h = pic creatif et moteur.',hl:false},
   {time:'15h30-15h50',label:'Pause creative',sub:'20 min - mode diffus',neuro:'Le cerveau relie les apprentissages en arriere-plan.',hl:false},
   {time:'15h50-16h20',label:'Italien - session active',sub:'30 min - shadowing',neuro:'Shadowing = voie royale pour la fluidite.',hl:false},
@@ -335,397 +545,580 @@ var SLOTS = [
   {time:'18h30-19h30',label:'Sport - Run Z2 ou Renfo',sub:'Lun/Mer: Run - Mar/Jeu: Renfo - Ven: Run long',neuro:'BDNF post-run consolide tout ce que tu as appris.',hl:false},
   {time:'21h30-22h00',label:'Bilan du jour',sub:'Dashboard + 3 lignes de note',neuro:'Ecriture reflexive avant sommeil = +30% retention.',hl:false},
 ];
-
-var TASKS = [
-  {id:'anthropic',label:'Anthropic Academy',sub:'30 min - module termine'},
+ 
+var TASKS=[
+  {id:'anthropic',label:'Anthropic Academy',sub:'30 min termine'},
   {id:'data',label:'Data - Power BI / SQL',sub:'90 min'},
   {id:'modelisme',label:'3D / Modelisme CLO',sub:'90 min'},
-  {id:'candidatures',label:'Candidatures',sub:'60 min - min. 2 envoyees'},
+  {id:'candidatures',label:'Candidatures',sub:'min. 2 envoyees'},
   {id:'italien',label:'Italien',sub:'2x 30 min'},
   {id:'couture',label:'Couture',sub:'30 min'},
   {id:'sport',label:'Sport',sub:'Run ou Renfo'},
   {id:'bilan',label:'Bilan du jour',sub:'Note + dashboard'},
 ];
-
-var PROGS = {
-  data:{label:'Data',weeks:[{n:'S1 - 12/05',now:true,title:'Fondations SQL',items:['SQL : SELECT, WHERE, ORDER BY, GROUP BY','Power BI : revision visuels termines','Excel : tableaux croises dynamiques','Mini-projet : dataset mode reel']},{n:'S2 - 19/05',title:'SQL intermediaire',items:['SQL : JOINs','SQL : sous-requetes','Power BI : modele en etoile','Excel : INDEX/EQUIV']},{n:'S3 - 26/05',title:'SQL avance + Power BI',items:['SQL : fonctions fenetres','Power BI : DAX avance','Dashboard interactif publie','Projet : KPIs marque mode']},{n:'S4 - 02/06',title:'Automatisation',items:['Power Query','Power BI : dataflows','SQL : vues','Python intro : pandas']},{n:'S5 - 09/06',title:'Portfolio',items:['Projet complet KPIs mode','Dashboard Power BI publie','LinkedIn update','5 questions entretien data x mode']}]},
-  modelisme:{label:'3D / Modelisme',weeks:[{n:'S1 - 12/05',now:true,title:'Base blouse + Valentina',items:['Base blouse Valentina','Corrections defauts','CLO : simulation tissu','Premiere blouse 3D rendue']},{n:'S2 - 19/05',title:'Pantalon + ajustements',items:['Base pantalon Valentina','CLO : ajustements morpho','Simulation tissus differents','Toile blouse couture physique']},{n:'S3 - 26/05',title:'Robe + draping',items:['Base robe Valentina','CLO : draping 3D','2 variantes coloris','Documentation portfolio']},{n:'S4 - 02/06',title:'Projet freelance',items:['Patron complet avec grade','Export PDF + DXF','Mini-book 3D 5 pieces','Contact 3 ateliers freelance']},{n:'S5 - 09/06',title:'Specialisation',items:['Maille : patronage elastique','Manteau : bases structurees','Rendu photo-realiste CLO','Portfolio Behance en ligne']}]},
-  italien:{label:'Italien',weeks:[{n:'S1 - 12/05',now:true,title:'Revision + consolidation',items:['Essere, avere, MI PIACE','Accord singulier/pluriel','Duolingo 20 min/jour','10 mots mode/textile Anki']},{n:'S2 - 19/05',title:'Present + mode',items:['Verbes -ARE, -ERE, -IRE','Decrire un vetement','Phrases showroom','ItalianPod101']},{n:'S3 - 26/05',title:'Passe + raconter',items:['Passato prossimo','Raconter une reunion mode','Vocabulaire production','2 min de presentation en italien']},{n:'S4 - 02/06',title:'Futur + pro',items:['Futuro semplice','Email fournisseur en italien','Vogue Italia','Shadowing YouTube']},{n:'S5 - 09/06',title:'Conversation',items:['Conditionnel','Simulation appel fournisseur','Serie italienne sous-titres IT','Test B1 en ligne']}]},
-  sport:{label:'Sport',weeks:[{n:'S1 - 12/05',now:true,title:'Zone 2 + renfo',items:['Lun : Renfo - squats bulgares, hip thrust, planche','Mar : Run 5km Z2 (FC 125-154)','Mer : Abs intense','Jeu : Run 5km qualitatif','Ven : Run long 8km Z2','1600 kcal / 100g proteines / creatine 3g']},{n:'S2 - 19/05',title:'Volume + fractionne',items:['Mar : Run 6km Z2','Jeu : Fractionne 6x400m','Ven : Run long 9km','Fentes laterales + RDL']},{n:'S3 - 26/05',title:'Endurance',items:['Jeu : Tempo 4km a 6:15/km','Ven : Run long 10km (premiere fois !)','Planche 3x45s chaque matin','Photos progression']},{n:'S4 - 02/06',title:'Specifique 10km',items:['Jeu : Fractionne 8x400m','Ven : Run long 11km','Test chrono : 5km (< 29 min)']},{n:'S5 - 09/06',title:'Affutage',items:['Jeu : 3x2km a 5:50/km','Ven : 10km confortable','Creatine 3g/jour + whey','Visualisation arrivee 10km']}]},
-  anthropic:{label:'Anthropic Academy',weeks:[{n:'S1 - 12/05',now:true,title:'Introduction IA',items:['Bases LLMs et IA generative','Prompting efficace','Cas usage mode','3 prompts reutilisables candidatures']},{n:'S2 - 19/05',title:'Prompt engineering',items:['Chain-of-thought, few-shot','Automatiser lettres de motivation','Analyser fiche de poste en 2 min','Template CV personnalise par poste']},{n:'S3 - 26/05',title:'Agents et automatisation',items:['Comprendre les agents IA','10 offres analysees en 10 min','Agent de veille LinkedIn','Suivi candidatures automatise']},{n:'S4 - 02/06',title:'IA + Data',items:['Claude + Power BI','Rapports auto depuis Excel','Nettoyer datasets mode','Dashboard enrichi IA']},{n:'S5 - 09/06',title:'Projet final',items:['Outil IA recherche emploi','Portfolio competences IA','LinkedIn : skills IA','Profil unicorn : mode + data + IA']}]},
-  couture:{label:'Couture',weeks:[{n:'S1 - 12/05',now:true,title:'Blouse projet',items:['Toile blouse Valentina','Ajustements morpho','Tissu final : lin ou popeline','Photo portfolio']},{n:'S2 - 19/05',title:'Finitions',items:['Couture blouse finale','Boutonnières, ourlets','Photo piece terminee','Prochain patron']},{n:'S3 - 26/05',title:'Nouveau projet',items:['Toile pantalon ou robe','Tissu upcycling','Partage Instagram (optionnel)']},{n:'S4 - 02/06',title:'Technique',items:['Fermeture invisible ou col tailleur','Mood board saison suivante']},{n:'S5 - 09/06',title:'Portfolio',items:['3 pieces photographiees','Portfolio PDF ou Behance','Description technique de chaque piece']}]},
+ 
+var PROGS={
+  data:{label:'Data',col:'#7F77DD',weeks:[{n:'S1 - 12/05',now:true,title:'Fondations SQL',items:['SQL : SELECT, WHERE, ORDER BY, GROUP BY','Power BI : revision visuels termines','Excel : tableaux croises dynamiques','Mini-projet : dataset mode reel']},{n:'S2 - 19/05',title:'SQL intermediaire',items:['SQL : JOINs (INNER, LEFT, RIGHT)','SQL : sous-requetes','Power BI : modele en etoile','Excel : INDEX/EQUIV']},{n:'S3 - 26/05',title:'SQL avance + DAX',items:['SQL : fonctions fenetres','Power BI : mesures DAX avancees','Dashboard interactif publie','Projet : KPIs marque mode']},{n:'S4 - 02/06',title:'Automatisation',items:['Power Query : nettoyage auto','Power BI : dataflows','SQL : vues, procedures','Python intro : pandas']},{n:'S5 - 09/06',title:'Portfolio data',items:['Projet complet KPIs mode','Dashboard Power BI publie','LinkedIn update','5 questions entretien data x mode']}]},
+  modelisme:{label:'3D / Modelisme',col:'#c8603a',weeks:[{n:'S1 - 12/05',now:true,title:'Base blouse + Valentina',items:['Base blouse Valentina','Corrections defauts frequents','CLO : simulation tissu basique','Premiere blouse 3D rendue']},{n:'S2 - 19/05',title:'Pantalon + ajustements',items:['Base pantalon Valentina','CLO : ajustements morpho','Simulation tissus differents','Toile blouse en couture physique']},{n:'S3 - 26/05',title:'Robe + draping 3D',items:['Base robe Valentina','CLO : draping 3D et plis','2 variantes coloris rendues','Documentation portfolio']},{n:'S4 - 02/06',title:'Projet freelance',items:['Patron complet avec grade','Export PDF + DXF','Mini-book 3D 5 pieces','Contact 3 ateliers freelance']},{n:'S5 - 09/06',title:'Specialisation',items:['Maille : patronage elastique','Manteau : bases structurees','Rendu photo-realiste CLO','Portfolio Behance en ligne']}]},
+  italien:{label:'Italien',col:'#c4973a',weeks:[{n:'S1 - 12/05',now:true,title:'Revision + consolidation',items:['Essere, avere, MI PIACE - revision active','Accord singulier/pluriel','Duolingo 20 min/jour - streak absolu','10 mots mode/textile par jour sur Anki']},{n:'S2 - 19/05',title:'Present + mode',items:['Verbes -ARE, -ERE, -IRE au present','Decrire un vetement : couleur, matiere','Phrases showroom : commandes, delais','ItalianPod101 10 min/jour']},{n:'S3 - 26/05',title:'Passe + raconter',items:['Passato prossimo : essere / avere','Raconter une reunion mode','Vocabulaire production : fournisseur, livraison','2 min de presentation en italien a voix haute']},{n:'S4 - 02/06',title:'Futur + pro',items:['Futuro semplice','Email fournisseur en italien','Vogue Italia 10 min/jour','Shadowing YouTube']},{n:'S5 - 09/06',title:'Conversation',items:['Conditionnel : Vorrei, Potrebbe','Simulation appel fournisseur','Serie italienne sous-titres IT','Test B1 en ligne (CILS gratuit)']}]},
+  sport:{label:'Sport',col:'#2d5a3d',weeks:[{n:'S1 - 12/05',now:true,title:'Zone 2 + renfo',items:['Lun : Renfo - squats bulgares, hip thrust, planche','Mar : Run 5km Z2 (FC 125-154 bpm)','Mer : Abs intense - bicycle crunch, mountain climbers','Jeu : Run 5km qualitatif (2x1km a 6:00/km)','Ven : Run long 8km Z2','1600 kcal / 100g proteines / creatine 3g']},{n:'S2 - 19/05',title:'Volume + fractionne',items:['Mar : Run 6km Z2','Jeu : Fractionne 6x400m (recu 90s)','Ven : Run long 9km','Renfo : fentes laterales + RDL']},{n:'S3 - 26/05',title:'Endurance',items:['Jeu : Tempo 4km a 6:15/km','Ven : Run long 10km (premiere fois !)','Planche 3x45s chaque matin','Photos progression']},{n:'S4 - 02/06',title:'Specifique 10km',items:['Jeu : Fractionne 8x400m a 5:50/km','Ven : Run long 11km','Renfo 2x : full body 45 min','Test chrono : 5km (< 29 min)']},{n:'S5 - 09/06',title:'Affutage',items:['Jeu : 3x2km a 5:50/km','Ven : 10km a allure confortable','Creatine 3g/jour + whey','Visualisation : arrivee au 10km']}]},
+  anthropic:{label:'Anthropic Academy',col:'#378ADD',weeks:[{n:'S1 - 12/05',now:true,title:'Introduction IA',items:['Bases LLMs et IA generative','Prompting efficace : contexte, role, format','Cas usage mode : descriptions produit, emails','3 prompts reutilisables pour candidatures']},{n:'S2 - 19/05',title:'Prompt engineering',items:['Chain-of-thought, few-shot prompting','Automatiser lettres de motivation','Analyser fiche de poste avec IA en 2 min','Template CV personnalise par poste']},{n:'S3 - 26/05',title:'Agents et automatisation',items:['Comprendre les agents IA','10 offres analysees en 10 min','Agent de veille LinkedIn','Suivi candidatures automatise']},{n:'S4 - 02/06',title:'IA + Data',items:['Claude + Power BI','Rapports auto depuis Excel','Nettoyer datasets mode avec IA','Dashboard enrichi par IA']},{n:'S5 - 09/06',title:'Projet final',items:['Outil IA pour recherche emploi','Portfolio competences IA','LinkedIn : skills IA ajoutes','Profil unicorn : mode + data + IA']}]},
+  couture:{label:'Couture',col:'#5a3d2d',weeks:[{n:'S1 - 12/05',now:true,title:'Blouse projet',items:['Toile blouse sur patron Valentina','Ajustements morphologiques (buste, epaules)','Tissu final : lin ou popeline','Documentation photo pour portfolio']},{n:'S2 - 19/05',title:'Finitions blouse',items:['Couture blouse finale','Boutonnières, ourlets, col tailleur','Photo piece terminee (fond blanc)','Lancer prochain patron']},{n:'S3 - 26/05',title:'Nouveau projet',items:['Toile pantalon ou robe (patron Valentina)','Test ajustements morpho','Tissu upcycling si disponible','Partage process Instagram (optionnel)']},{n:'S4 - 02/06',title:'Technique',items:['Fermeture invisible ou col tailleur','Application sur projet en cours','Mood board saison suivante','Recherche tissus prochain projet']},{n:'S5 - 09/06',title:'Portfolio',items:['3 pieces photographiees','Styling + photographie qualite','Portfolio PDF ou Behance','Description technique de chaque piece']}]},
 };
-var PROG_KEYS = ['data','modelisme','italien','sport','anthropic','couture'];
-var currentProg = 'data';
-
-function goPanel(id, btn) {
+var PROG_KEYS=['data','modelisme','italien','sport','anthropic','couture'];
+ 
+function goPanel(id,btn){
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.ntab').forEach(function(t){t.classList.remove('on');});
   document.getElementById('panel-'+id).classList.add('on');
-  if(btn) btn.classList.add('on');
-  if(id==='programme') renderProg();
-  if(id==='cand') renderCands();
-  if(id==='sport') renderSport();
-  if(id==='prog') renderProgression();
+  if(btn)btn.classList.add('on');
+  if(id==='semaine')renderSemaine();
+  if(id==='calendrier')renderCalendrier();
+  if(id==='cand')renderCands();
+  if(id==='sport')renderSport();
+  if(id==='programme')renderProg();
+  if(id==='progression')renderProgression();
 }
-
-function renderAll() {
-  // Header
-  var now = new Date();
-  var dl = document.getElementById('date-lbl');
-  if(dl) dl.textContent = now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
-  var mq = document.getElementById('motiv-q');
-  if(mq) mq.textContent = MOTIVS[now.getDay() % MOTIVS.length];
-  var sv = document.getElementById('streak-val');
-  if(sv) sv.textContent = D.streak || 0;
-  document.getElementById('s-date').value = now.toISOString().split('T')[0];
-  document.getElementById('c-date').value = now.toISOString().split('T')[0];
+ 
+function renderAll(){
+  var now=new Date();
+  var dl=document.getElementById('date-lbl');
+  if(dl)dl.textContent=now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+  var ml=document.getElementById('motiv-line');
+  if(ml)ml.textContent='«\u00a0'+MOTIVS[now.getDay()%MOTIVS.length]+'\u00a0»';
+  var sv=document.getElementById('streak-val');
+  if(sv)sv.textContent=D.streak||0;
+  document.getElementById('s-date').value=now.toISOString().split('T')[0];
+  document.getElementById('c-date').value=now.toISOString().split('T')[0];
   renderMetrics();
   renderTodaySlots();
   renderChecks();
   updateStreak();
+  renderMotiv();
 }
-
-function renderMetrics() {
-  var now = new Date();
-  var tk = todayKey();
-  var mon = new Date(now); mon.setDate(now.getDate()-(now.getDay()||7)+1); mon.setHours(0,0,0,0);
-  function parseDate(s) { if(!s) return null; var p=s.split('/'); return new Date(p[2],p[1]-1,p[0]); }
-  var todayCands = (D.candidatures||[]).filter(function(c){return c.date===tk;}).length;
-  var todayKm = (D.sport||[]).filter(function(s){return s.date===tk&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0);
-  var todayChecks = Object.values((D.checks||{})[tk]||{}).filter(Boolean).length;
-  var weekCands = (D.candidatures||[]).filter(function(c){var d=parseDate(c.date);return d&&d>=mon;}).length;
-  var weekKm = Math.round((D.sport||[]).filter(function(s){var d=parseDate(s.date);return d&&d>=mon&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0));
-  var monthCands = (D.candidatures||[]).filter(function(c){var d=parseDate(c.date);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
-  var monthKm = Math.round((D.sport||[]).filter(function(s){var d=parseDate(s.date);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0));
-  var ent = (D.candidatures||[]).filter(function(c){return c.status==='entretien';}).length;
-  var mets = [
-    {l:"Candidatures auj.",v:todayCands,s:'semaine: '+weekCands+' · mois: '+monthCands+(todayCands>=2?' ✓':' · obj: 2'),cls:'acc'},
-    {l:"Sport auj.",v:todayKm>0?todayKm+'km':'—',s:'semaine: '+weekKm+'km · mois: '+monthKm+'km',cls:'acc2'},
-    {l:"Taches auj.",v:todayChecks+'/8',s:Math.round(todayChecks/8*100)+'% complete',cls:''},
-    {l:'Entretiens',v:ent,s:(D.candidatures||[]).length+' candidatures · '+D.streak+'j streak',cls:'gold'},
+ 
+function parseDate(s){if(!s)return null;var p=s.split('/');if(p.length!==3)return null;return new Date(p[2],p[1]-1,p[0]);}
+ 
+function renderMetrics(){
+  var now=new Date();var tk=todayKey();
+  var mon=new Date(now);mon.setDate(now.getDate()-(now.getDay()||7)+1);mon.setHours(0,0,0,0);
+  var todayCands=(D.candidatures||[]).filter(function(c){return c.date===tk;}).length;
+  var todayKm=(D.sport||[]).filter(function(s){return s.date===tk&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0);
+  var todayChecks=Object.values((D.checks||{})[tk]||{}).filter(Boolean).length;
+  var weekCands=(D.candidatures||[]).filter(function(c){var d=parseDate(c.date);return d&&d>=mon;}).length;
+  var weekKm=Math.round((D.sport||[]).filter(function(s){var d=parseDate(s.date);return d&&d>=mon&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0));
+  var monthCands=(D.candidatures||[]).filter(function(c){var d=parseDate(c.date);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
+  var monthKm=Math.round((D.sport||[]).filter(function(s){var d=parseDate(s.date);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0));
+  var ent=(D.candidatures||[]).filter(function(c){return c.status==='entretien';}).length;
+  var mets=[
+    {l:"Candidatures auj.",v:todayCands,s:'sem: '+weekCands+' · mois: '+monthCands+(todayCands>=2?' ✓':' · obj: 2'),cls:'acc'},
+    {l:"Sport auj.",v:todayKm>0?todayKm+'km':'—',s:'sem: '+weekKm+'km · mois: '+monthKm+'km',cls:'acc2'},
+    {l:"Taches auj.",v:todayChecks+'/8',s:Math.round(todayChecks/8*100)+'% complete',cls:'gold'},
+    {l:'Entretiens',v:ent,s:(D.candidatures||[]).length+' candidatures · '+D.streak+'j streak',cls:'blue'},
   ];
-  document.getElementById('metrics').innerHTML = mets.map(function(m){
-    return '<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';
-  }).join('');
+  document.getElementById('metrics').innerHTML=mets.map(function(m){return'<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';}).join('');
 }
-
-function renderTodaySlots() {
-  var di = todayIdx();
-  var dl = document.getElementById('day-label');
-  if(dl) dl.textContent = DLABELS[Math.min(di,6)] + ' ' + todayKey();
-  var el = document.getElementById('today-slots');
-  if(!el) return;
-  var html = '';
-  SLOTS.forEach(function(s) {
-    html += '<div class="slot">';
-    html += '<span class="slot-time">'+s.time+'</span>';
-    html += '<div>';
-    html += '<div class="slot-label'+(s.hl?' hl':'')+'">' + s.label + ' <span class="slot-sub">' + s.sub + '</span></div>';
-    html += '<div class="slot-neuro">🧠 '+s.neuro+'</div>';
-    html += '</div></div>';
+ 
+function renderTodaySlots(){
+  var di=todayIdx();
+  var dl=document.getElementById('day-label');
+  if(dl)dl.textContent=DL[Math.min(di,6)]+' '+todayKey();
+  var el=document.getElementById('today-slots');if(!el)return;
+  var html='';
+  SLOTS.forEach(function(s){
+    html+='<div class="slot"><span class="slot-time">'+s.time+'</span><div>';
+    html+='<div class="slot-label'+(s.hl?' hl':'')+'">'+s.label+' <span class="slot-sub">'+s.sub+'</span></div>';
+    if(s.neuro)html+='<div class="slot-neuro">🧠 '+s.neuro+'</div>';
+    html+='</div></div>';
   });
-  el.innerHTML = html;
-}
-
-function renderChecks() {
-  var tk = todayKey();
-  if(!D.checks) D.checks = {};
-  if(!D.checks[tk]) D.checks[tk] = {};
-  var el = document.getElementById('today-checks');
-  if(!el) return;
-  var html = '';
-  TASKS.forEach(function(t) {
-    var done = !!D.checks[tk][t.id];
-    html += '<div class="ci">';
-    html += '<div class="cb' + (done?' done':'') + '" onclick="toggleCheck(\'' + tk + '\',\'' + t.id + '\')">' + (done?'✓':'') + '</div>';
-    html += '<div><div class="ci-label">'+t.label+'</div><div class="ci-sub">'+t.sub+'</div></div>';
-    html += '</div>';
+  (D.customSlots||[]).forEach(function(s,i){
+    html+='<div class="slot" style="background:#f9f9f7"><span class="slot-time">'+s.time+'</span><div>';
+    html+='<div class="slot-label'+(s.hl?' hl':'')+'" style="display:flex;justify-content:space-between">';
+    html+='<span>'+s.label+(s.sub?' <span class="slot-sub">'+s.sub+'</span>':'')+'</span>';
+    html+='<button onclick="delSlot('+i+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px;padding:0">✕</button>';
+    html+='</div></div></div>';
   });
-  el.innerHTML = html;
-  var na = document.getElementById('note-area');
-  if(na) na.value = (D.notes||{})[tk] || '';
+  el.innerHTML=html;
 }
-
-async function toggleCheck(tk, id) {
-  if(!D.checks[tk]) D.checks[tk] = {};
-  D.checks[tk][id] = !D.checks[tk][id];
-  await saveDB(); updateStreak(); renderChecks(); renderMetrics();
+ 
+function renderChecks(){
+  var tk=todayKey();
+  if(!D.checks)D.checks={};if(!D.checks[tk])D.checks[tk]={};
+  var el=document.getElementById('today-checks');if(!el)return;
+  var html='';
+  var allTasks=TASKS.concat(D.customTasks||[]);
+  allTasks.forEach(function(t){
+    var done=!!D.checks[tk][t.id];
+    html+='<div class="ci">';
+    var cbClass = done ? 'cb done' : 'cb';
+    var cbOnclick = 'toggleCheck(' + JSON.stringify(tk) + ',' + JSON.stringify(t.id) + ')';
+    html += '<div class="' + cbClass + '" onclick="' + cbOnclick + '">' + (done ? '✓' : '') + ' </div>';
+    html+='<div style="flex:1">';
+    html+='<div class="ci-label" style="display:flex;justify-content:space-between"><span>'+t.label+'</span>';
+    if(t.custom)html+='<button onclick="delCustomTask(\"'+t.id+'\")" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px">✕</button>';
+    html+='</div><div class="ci-sub">'+t.sub+'</div></div></div>';
+  });
+  el.innerHTML=html;
+  var na=document.getElementById('note-area');
+  if(na)na.value=(D.notes||{})[tk]||'';
 }
-
-async function saveNote(v) {
-  if(!D.notes) D.notes = {};
-  D.notes[todayKey()] = v;
-  await saveDB();
+ 
+async function toggleCheck(tk,id){
+  if(!D.checks[tk])D.checks[tk]={};
+  D.checks[tk][id]=!D.checks[tk][id];
+  await saveDB();updateStreak();renderChecks();renderMetrics();
 }
-
-function updateStreak() {
-  var tk = todayKey();
-  var checks = (D.checks||{})[tk] || {};
-  var done = Object.values(checks).filter(Boolean).length;
-  if(done>0 && D.lastActive!==tk) {
-    var yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
-    var yk = fmt(yesterday);
-    D.streak = D.lastActive===yk ? (D.streak||0)+1 : 1;
-    D.lastActive = tk;
-    saveDB();
+async function saveNote(v){if(!D.notes)D.notes={};D.notes[todayKey()]=v;await saveDB();}
+ 
+function updateStreak(){
+  var tk=todayKey();
+  var checks=(D.checks||{})[tk]||{};
+  var done=Object.values(checks).filter(Boolean).length;
+  if(done>0&&D.lastActive!==tk){
+    var y=new Date();y.setDate(y.getDate()-1);var yk=fmt(y);
+    D.streak=D.lastActive===yk?(D.streak||0)+1:1;
+    D.lastActive=tk;saveDB();
   }
-  var sv = document.getElementById('streak-val');
-  if(sv) sv.textContent = D.streak || 0;
+  var sv=document.getElementById('streak-val');if(sv)sv.textContent=D.streak||0;
 }
-
-function renderProg() {
-  document.getElementById('ptabs').innerHTML = PROG_KEYS.map(function(k){
-    return '<button class="ptab'+(k===currentProg?' on':'')+'" onclick="switchProg(\''+k+'\',this)">'+PROGS[k].label+'</button>';
-  }).join('');
-  var p = PROGS[currentProg];
-  document.getElementById('prog-body').innerHTML = '<div class="card">' +
-    p.weeks.map(function(w){
-      return '<div class="week-block'+(w.now?' now':'')+'">'+
-        '<div class="week-n">'+w.n+(w.now?'<span class="now-pill">En cours</span>':'')+'</div>'+
-        '<div class="week-title">'+w.title+'</div>'+
-        '<ul class="week-items">'+w.items.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>'+
-        '</div>';
-    }).join('') + '</div>';
+ 
+// VUE SEMAINE
+function getWeekStart(offset){
+  var now=new Date();var dow=now.getDay()||7;
+  var mon=new Date(now);mon.setDate(now.getDate()-dow+1+offset*7);mon.setHours(0,0,0,0);
+  return mon;
 }
-function switchProg(k, btn) {
-  currentProg = k;
-  document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('on');});
-  btn.classList.add('on');
-  renderProg();
+ 
+function renderSemaine(){
+  var start=getWeekStart(currentWeekOffset);
+  var end=new Date(start);end.setDate(start.getDate()+6);
+  document.getElementById('week-title').textContent='Semaine du '+fmt(start).slice(0,5)+' au '+fmt(end);
+  var todayStr=todayKey();
+  var grid=document.getElementById('week-grid');
+  var html='';
+  for(var i=0;i<7;i++){
+    var d=new Date(start);d.setDate(start.getDate()+i);
+    var dk=fmt(d);
+    var isToday=dk===todayStr;
+    var cands=(D.candidatures||[]).filter(function(c){return c.date===dk;});
+    var sports=(D.sport||[]).filter(function(s){return s.date===dk;});
+    var checks=Object.values((D.checks||{})[dk]||{}).filter(Boolean).length;
+    html+='<div class="week-col'+(isToday?' today':'')+'" onclick="openDayModal(\''+dk+'\')"><div class="week-day-name">'+DL[i].slice(0,3)+'</div><div class="week-day-num">'+d.getDate()+'</div>';
+    cands.forEach(function(c){html+='<div class="week-event cand">'+c.name+(c.status==='entretien'?' 🤝':'')+'</div>';});
+    sports.forEach(function(s){if(s.km>0)html+='<div class="week-event sport">'+s.km+'km '+s.type.split(' ')[0]+'</div>';else if(s.type)html+='<div class="week-event sport">'+s.type+'</div>';});
+    if(checks>0)html+='<div class="week-event check">'+checks+'/8 taches</div>';
+    html+='</div>';
+  }
+  grid.innerHTML=html;
+  // Résumé
+  var totalCands=0,totalKm=0,totalChecks=0,totalDays=0;
+  for(var i=0;i<7;i++){
+    var d=new Date(start);d.setDate(start.getDate()+i);var dk=fmt(d);
+    totalCands+=(D.candidatures||[]).filter(function(c){return c.date===dk;}).length;
+    totalKm+=(D.sport||[]).filter(function(s){return s.date===dk&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0);
+    var dc=Object.values((D.checks||{})[dk]||{}).filter(Boolean).length;
+    if(dc>0)totalDays++;
+    totalChecks+=dc;
+  }
+  var entretiens=(D.candidatures||[]).filter(function(c){
+    var d=parseDate(c.date);return d&&d>=start&&d<=end&&c.status==='entretien';
+  }).length;
+  document.getElementById('week-summary').innerHTML='<div class="grid3"><div class="card" style="margin-bottom:0"><div class="met-l">Candidatures</div><div class="met-v" style="font-size:24px">'+totalCands+'</div><div class="met-s">'+entretiens+' entretien'+(entretiens>1?'s':'')+'</div></div><div class="card" style="margin-bottom:0"><div class="met-l">Km courus</div><div class="met-v" style="font-size:24px">'+Math.round(totalKm)+'</div><div class="met-s">km cette semaine</div></div><div class="card" style="margin-bottom:0"><div class="met-l">Taches cochees</div><div class="met-v" style="font-size:24px">'+totalChecks+'</div><div class="met-s">'+totalDays+' jours actifs</div></div></div>';
 }
-
-function renderCands() {
-  var filter = document.getElementById('cand-filter').value;
-  var cands = D.candidatures || [];
-  var filtered = filter==='all' ? cands : cands.filter(function(c){return c.status===filter;});
-  var ent = cands.filter(function(c){return c.status==='entretien';}).length;
-  document.getElementById('cand-count').textContent = cands.length + ' candidatures · ' + ent + ' entretien' + (ent>1?'s':'');
-  document.getElementById('cand-metrics').innerHTML = [
+ 
+function changeWeek(dir){currentWeekOffset+=dir;renderSemaine();}
+ 
+// CALENDRIER
+function renderCalendrier(){
+  var y=currentMonth.getFullYear(),m=currentMonth.getMonth();
+  document.getElementById('cal-title').textContent=MOIS[m]+' '+y;
+  var first=new Date(y,m,1);var dow=first.getDay()||7;
+  var grid=document.getElementById('cal-grid');
+  var html='';
+  var days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  days.forEach(function(d){html+='<div class="cal-header">'+d+'</div>';});
+  for(var i=1;i<dow;i++){
+    var prev=new Date(y,m,1-dow+i);
+    html+='<div class="cal-day other-month"><div class="cal-day-num">'+prev.getDate()+'</div></div>';
+  }
+  var daysInMonth=new Date(y,m+1,0).getDate();
+  var todayStr=todayKey();
+  for(var d=1;d<=daysInMonth;d++){
+    var date=new Date(y,m,d);var dk=fmt(date);
+    var isToday=dk===todayStr;var isSel=dk===selectedDayKey;
+    var hasCand=(D.candidatures||[]).some(function(c){return c.date===dk;});
+    var hasSport=(D.sport||[]).some(function(s){return s.date===dk;});
+    var hasCheck=Object.values((D.checks||{})[dk]||{}).some(Boolean);
+    html+='<div class="cal-day'+(isToday?' today':'')+(isSel?' selected':'')+'" onclick="selectDay(\''+dk+'\','+date.getFullYear()+','+date.getMonth()+','+date.getDate()+')">';
+    html+='<div class="cal-day-num">'+d+'</div>';
+    if(hasCand)html+='<span class="cal-dot cand"></span>';
+    if(hasSport)html+='<span class="cal-dot sport"></span>';
+    if(hasCheck)html+='<span class="cal-dot check"></span>';
+    html+='</div>';
+  }
+  var lastDay=new Date(y,m,daysInMonth).getDay()||7;
+  for(var i=lastDay+1;i<=7;i++){
+    var next=new Date(y,m+1,i-lastDay);
+    html+='<div class="cal-day other-month"><div class="cal-day-num">'+next.getDate()+'</div></div>';
+  }
+  grid.innerHTML=html;
+}
+ 
+function changeMonth(dir){
+  currentMonth=new Date(currentMonth.getFullYear(),currentMonth.getMonth()+dir,1);
+  renderCalendrier();
+}
+ 
+function selectDay(dk,y,m,d){
+  selectedDayKey=dk;selectedDay=new Date(y,m,d);
+  renderCalendrier();
+  var detail=document.getElementById('cal-detail');
+  var title=document.getElementById('cal-detail-title');
+  var content=document.getElementById('cal-detail-content');
+  detail.style.display='block';
+  var dayName=DL[(new Date(y,m,d).getDay()||7)-1];
+  title.textContent=dayName+' '+d+' '+MOIS[m]+' '+y;
+  var cands=(D.candidatures||[]).filter(function(c){return c.date===dk;});
+  var sports=(D.sport||[]).filter(function(s){return s.date===dk;});
+  var checks=(D.checks||{})[dk]||{};
+  var note=(D.notes||{})[dk]||'';
+  var html='';
+  if(cands.length>0){
+    html+='<div style="margin-bottom:10px"><div class="met-l" style="margin-bottom:6px">Candidatures</div>';
+    cands.forEach(function(c){html+='<div style="font-size:13px;padding:4px 0">'+c.name+(c.poste?' — '+c.poste:'')+' <span class="status-sel s-'+c.status+'" style="margin-left:6px">'+c.status+'</span></div>';});
+    html+='</div>';
+  }
+  if(sports.length>0){
+    html+='<div style="margin-bottom:10px"><div class="met-l" style="margin-bottom:6px">Sport</div>';
+    sports.forEach(function(s){html+='<div style="font-size:13px;padding:4px 0">'+(s.km>0?s.km+'km ':'')+s.type+(s.note?' — '+s.note:'')+'</div>';});
+    html+='</div>';
+  }
+  var doneChecks=Object.keys(checks).filter(function(k){return checks[k];});
+  if(doneChecks.length>0){
+    html+='<div style="margin-bottom:10px"><div class="met-l" style="margin-bottom:6px">Taches cochees</div>';
+    html+='<div style="font-size:13px;color:#6b6456">'+doneChecks.length+'/8 taches accomplies</div>';
+    html+='</div>';
+  }
+  if(!cands.length&&!sports.length&&!doneChecks.length){
+    html+='<div style="font-size:13px;color:#b0a898;padding:8px 0">Aucune activite enregistree ce jour.</div>';
+  }
+  content.innerHTML=html;
+  var mn=document.getElementById('modal-note');if(mn)mn.value=note;
+}
+ 
+// MODAL
+function openDayModal(dk){
+  var parts=dk.split('/');
+  selectDay(dk,parseInt(parts[2]),parseInt(parts[1])-1,parseInt(parts[0]));
+  var d=parseDate(dk);if(!d)return;
+  var dayName=DL[(d.getDay()||7)-1];
+  document.getElementById('modal-title').textContent=dayName+' '+d.getDate()+' '+MOIS[d.getMonth()]+' '+d.getFullYear();
+  var content=document.getElementById('modal-content');
+  var cands=(D.candidatures||[]).filter(function(c){return c.date===dk;});
+  var sports=(D.sport||[]).filter(function(s){return s.date===dk;});
+  var checks=(D.checks||{})[dk]||{};
+  var html='';
+  if(cands.length>0){
+    html+='<div style="margin-bottom:12px"><div class="met-l" style="margin-bottom:6px">Candidatures</div>';
+    cands.forEach(function(c){html+='<div style="font-size:13px;padding:4px 0;display:flex;justify-content:space-between"><span>'+c.name+(c.poste?' — '+c.poste:'')+'</span><span class="status-sel s-'+c.status+'">'+c.status+'</span></div>';});
+    html+='</div>';
+  }
+  if(sports.length>0){
+    html+='<div style="margin-bottom:12px"><div class="met-l" style="margin-bottom:6px">Sport</div>';
+    sports.forEach(function(s){html+='<div style="font-size:13px;padding:4px 0">'+(s.km>0?s.km+'km ':'')+s.type+(s.note?' · '+s.note:'')+'</div>';});
+    html+='</div>';
+  }
+  var doneC=Object.keys(checks).filter(function(k){return checks[k];}).length;
+  html+='<div style="font-size:13px;color:#6b6456;margin-bottom:12px">'+doneC+'/8 taches cochees ce jour</div>';
+  if(!cands.length&&!sports.length){html='<div style="font-size:13px;color:#b0a898;margin-bottom:12px">Aucune activite ce jour.</div>';}
+  content.innerHTML=html;
+  var mn=document.getElementById('modal-note');if(mn)mn.value=(D.notes||{})[dk]||'';
+  selectedDayKey=dk;
+  document.getElementById('modal-overlay').classList.add('on');
+}
+ 
+function closeModal(e){if(e.target===document.getElementById('modal-overlay'))document.getElementById('modal-overlay').classList.remove('on');}
+ 
+async function saveModalNote(v){
+  if(!D.notes)D.notes={};
+  if(selectedDayKey){D.notes[selectedDayKey]=v;await saveDB();}
+}
+ 
+// CANDIDATURES
+function renderCands(){
+  var filter=document.getElementById('cand-filter').value;
+  var sort=document.getElementById('cand-sort').value;
+  var cands=D.candidatures||[];
+  var filtered=filter==='all'?[...cands]:cands.filter(function(c){return c.status===filter;});
+  if(sort==='alpha')filtered.sort(function(a,b){return a.name.localeCompare(b.name);});
+  else if(sort==='status'){var o={entretien:0,relance:1,envoyee:2,refus:3};filtered.sort(function(a,b){return(o[a.status]||2)-(o[b.status]||2);});}
+  else filtered.reverse();
+  var ent=cands.filter(function(c){return c.status==='entretien';}).length;
+  document.getElementById('cand-count').textContent=cands.length+' candidatures · '+ent+' entretien'+(ent>1?'s':'');
+  document.getElementById('cand-metrics').innerHTML=[
     {l:'Total',v:cands.length,s:'depuis le debut',cls:''},
     {l:'Entretiens',v:ent,s:'en cours',cls:'acc2'},
     {l:'Relances',v:cands.filter(function(c){return c.status==='relance';}).length,s:'a suivre',cls:'gold'},
     {l:'Taux',v:cands.length>0?Math.round(ent/cands.length*100)+'%':'0%',s:'entretiens/envois',cls:'acc'},
-  ].map(function(m){return '<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';}).join('');
-  document.getElementById('cand-list').innerHTML = filtered.length===0 ?
-    '<div style="font-size:13px;color:#b0a898;padding:16px 0;text-align:center">Aucune candidature</div>' :
-    [...filtered].reverse().map(function(c){
-      return '<div class="cand-item">'+
-        '<div><div class="cand-name">'+c.name+(c.poste?' <span style="font-weight:400;font-size:12px;color:#6b6456">— '+c.poste+'</span>':'')+'</div>'+
+  ].map(function(m){return'<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';}).join('');
+  document.getElementById('cand-list').innerHTML=filtered.length===0?'<div style="font-size:13px;color:#b0a898;padding:16px 0;text-align:center">Aucune candidature</div>':
+    filtered.map(function(c){
+      return'<div class="cand-item">'+
+        '<div style="flex:1">'+
+        '<div class="cand-name">'+c.name+(c.poste?'<span style="font-weight:400;font-size:12px;color:#6b6456"> — '+c.poste+'</span>':'')+'</div>'+
         (c.notes?'<div class="cand-detail">'+c.notes+'</div>':'')+
-        '<div class="cand-meta">'+c.type+(c.date?' · '+c.date:'')+(c.sal?' · '+c.sal:'')+'</div></div>'+
-        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">'+
+        '<div class="cand-meta">'+c.type+(c.date?' · '+c.date:'')+(c.sal?' · '+c.sal:'')+'</div>'+
+        '<textarea class="note-area" style="min-height:40px;margin-top:6px;font-size:11px" placeholder="Ajouter une note..." oninput="updateCandNote('+c.id+',this.value)">'+( c.fullnotes||'')+'</textarea>'+
+        '</div>'+
+        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;margin-left:10px">'+
         '<select class="status-sel s-'+c.status+'" onchange="updateCandStatus('+c.id+',this.value)">'+
         '<option value="envoyee"'+(c.status==='envoyee'?' selected':'')+'>Envoyee</option>'+
         '<option value="relance"'+(c.status==='relance'?' selected':'')+'>Relance</option>'+
         '<option value="entretien"'+(c.status==='entretien'?' selected':'')+'>Entretien</option>'+
         '<option value="refus"'+(c.status==='refus'?' selected':'')+'>Refus</option>'+
         '</select>'+
-        '<button class="del-btn" onclick="delCand('+c.id+')">✕</button>'+
+        '<button class="del-btn" onclick="delCand('+c.id+')" title="Supprimer">✕</button>'+
         '</div></div>';
     }).join('');
 }
-
-async function addCand() {
-  var name = document.getElementById('c-name').value.trim();
-  if(!name) return;
-  var maxId = (D.candidatures||[]).reduce(function(m,c){return Math.max(m,c.id||0);},0);
-  var nc = {id:maxId+1,name:name,poste:document.getElementById('c-poste').value.trim(),type:document.getElementById('c-type').value,status:'envoyee',notes:document.getElementById('c-notes').value.trim(),date:document.getElementById('c-date').value?new Date(document.getElementById('c-date').value).toLocaleDateString('fr-FR'):fmt(new Date()),sal:document.getElementById('c-sal').value.trim()};
-  if(!D.candidatures) D.candidatures = [];
+ 
+async function addCand(){
+  var name=document.getElementById('c-name').value.trim();if(!name)return;
+  var maxId=(D.candidatures||[]).reduce(function(m,c){return Math.max(m,c.id||0);},0);
+  var dateVal=document.getElementById('c-date').value;
+  var nc={id:maxId+1,name:name,poste:document.getElementById('c-poste').value.trim(),type:document.getElementById('c-type').value,status:document.getElementById('c-status').value,notes:document.getElementById('c-notes').value.trim(),date:dateVal?new Date(dateVal).toLocaleDateString('fr-FR'):fmt(new Date()),sal:document.getElementById('c-sal').value.trim(),fullnotes:''};
+  if(!D.candidatures)D.candidatures=[];
   D.candidatures.push(nc);
   ['c-name','c-poste','c-notes','c-sal'].forEach(function(id){document.getElementById(id).value='';});
-  await saveDB(); renderCands(); renderMetrics();
+  await saveDB();renderCands();renderMetrics();
+  var fb=document.getElementById('c-feedback');fb.textContent='✓ '+nc.name+' ajoutee !';fb.style.display='block';setTimeout(function(){fb.style.display='none';},3000);
 }
-async function updateCandStatus(id, status) {
-  var c = (D.candidatures||[]).find(function(x){return x.id===id;});
+ 
+async function updateCandStatus(id,status){
+  var c=(D.candidatures||[]).find(function(x){return x.id===id;});
   if(c){c.status=status;await saveDB();renderCands();renderMetrics();}
 }
-async function delCand(id) {
-  if(confirm('Supprimer ?')){D.candidatures=(D.candidatures||[]).filter(function(c){return c.id!==id;});await saveDB();renderCands();renderMetrics();}
+ 
+async function updateCandNote(id,v){
+  var c=(D.candidatures||[]).find(function(x){return x.id===id;});
+  if(c){c.fullnotes=v;await saveDB();}
 }
-
-function renderSport() {
-  var sport = D.sport || [];
-  var tkm = Math.round(sport.reduce(function(s,r){return s+(parseFloat(r.km)||0);},0));
-  var now = new Date();
-  function parseDate(s){if(!s)return null;var p=s.split('/');return new Date(p[2],p[1]-1,p[0]);}
-  var thisM = Math.round(sport.filter(function(s){var d=parseDate(s.date);return d&&d.getMonth()===now.getMonth()&&s.km>0;}).reduce(function(s,r){return s+(parseFloat(r.km)||0);},0));
-  document.getElementById('sport-metrics').innerHTML = [
+ 
+async function delCand(id){
+  if(confirm('Supprimer cette candidature ?')){
+    D.candidatures=(D.candidatures||[]).filter(function(c){return c.id!==id;});
+    await saveDB();renderCands();renderMetrics();
+  }
+}
+ 
+// SPORT
+function renderSport(){
+  var sport=D.sport||[];
+  var tkm=Math.round(sport.reduce(function(s,r){return s+(parseFloat(r.km)||0);},0));
+  var now=new Date();
+  var thisM=Math.round(sport.filter(function(s){var d=parseDate(s.date);return d&&d.getMonth()===now.getMonth()&&s.km>0;}).reduce(function(s,r){return s+(parseFloat(r.km)||0);},0));
+  document.getElementById('sport-metrics').innerHTML=[
     {l:'Km total',v:tkm,s:sport.filter(function(s){return s.km>0;}).length+' seances run',cls:'acc2'},
     {l:'Km ce mois',v:thisM,s:'objectif 100km',cls:''},
-    {l:'Seances total',v:sport.length,s:'runs + renfo',cls:''},
-    {l:'Record 10km',v:'1h22',s:'objectif : 1h00',cls:'gold'},
-  ].map(function(m){return '<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';}).join('');
-  var p10k = Math.min(sport.length*3,40);
-  document.getElementById('p10k-lbl').textContent = p10k+'%'; document.getElementById('pf-10k').style.width=p10k+'%';
-  var p6p = Math.min(sport.filter(function(s){return s.type==='Abs/Gainage'||s.type==='Renfo bas';}).length*5,100);
-  document.getElementById('p6p-lbl').textContent = p6p+'%'; document.getElementById('pf-6p').style.width=p6p+'%';
-  var pvol = Math.min(Math.round(thisM/100*100),100);
-  document.getElementById('pvol-lbl').textContent = pvol+'% ('+thisM+'/100km)'; document.getElementById('pf-vol').style.width=pvol+'%';
-  var maxKm = Math.max.apply(null, sport.filter(function(s){return s.km>0;}).map(function(s){return s.km;}).concat([1]));
-  document.getElementById('sport-list').innerHTML = [...sport].reverse().slice(0,10).map(function(s){
-    return '<div class="sport-row">'+
-      '<span class="sport-date">'+s.date+'</span>'+
+    {l:'Seances total',v:sport.length,s:'runs + renfo',cls:'gold'},
+    {l:'Record 10km',v:'1h22',s:'objectif : 1h00',cls:'acc'},
+  ].map(function(m){return'<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';}).join('');
+  var p10k=Math.min(sport.length*3,40);
+  document.getElementById('p10k-lbl').textContent=p10k+'%';document.getElementById('pf-10k').style.width=p10k+'%';
+  var p6p=Math.min(sport.filter(function(s){return s.type==='Abs/Gainage'||s.type==='Renfo bas';}).length*5,100);
+  document.getElementById('p6p-lbl').textContent=p6p+'%';document.getElementById('pf-6p').style.width=p6p+'%';
+  var pvol=Math.min(Math.round(thisM/100*100),100);
+  document.getElementById('pvol-lbl').textContent=pvol+'% ('+thisM+'/100km)';document.getElementById('pf-vol').style.width=pvol+'%';
+  var maxKm=Math.max.apply(null,sport.filter(function(s){return s.km>0;}).map(function(s){return s.km;}).concat([1]));
+  document.getElementById('sport-list').innerHTML=[...sport].reverse().slice(0,15).map(function(s){
+    return'<div class="sport-row"><span class="sport-date">'+s.date+'</span>'+
       '<div class="sport-info"><div class="sport-km">'+(s.km>0?s.km+' km':'')+' <span class="sport-type">'+s.type+'</span></div>'+(s.note?'<div style="font-size:11px;color:#b0a898">'+s.note+'</div>':'')+' </div>'+
-      (s.km>0?'<div class="sport-bar" style="width:70px"><div class="sport-fill" style="width:'+Math.round(s.km/maxKm*100)+'%"></div></div>':'')+
-      '</div>';
+      (s.km>0?'<div class="sport-bar"><div class="sport-fill" style="width:'+Math.round(s.km/maxKm*100)+'%"></div></div>':'')+
+      '<button class="del-btn" onclick="delSport('+s.id+')" title="Supprimer">✕</button></div>';
   }).join('');
 }
-async function addSport() {
-  var km = parseFloat(document.getElementById('s-km').value)||0;
-  var type = document.getElementById('s-type').value;
-  var dateVal = document.getElementById('s-date').value;
-  var date = dateVal ? new Date(dateVal).toLocaleDateString('fr-FR') : fmt(new Date());
-  var note = document.getElementById('s-note').value.trim();
-  if(!D.sport) D.sport = [];
-  var maxId = (D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
+ 
+async function addSport(){
+  var km=parseFloat(document.getElementById('s-km').value)||0;
+  var type=document.getElementById('s-type').value;
+  var dateVal=document.getElementById('s-date').value;
+  var date=dateVal?new Date(dateVal).toLocaleDateString('fr-FR'):fmt(new Date());
+  var note=document.getElementById('s-note').value.trim();
+  if(!D.sport)D.sport=[];
+  var maxId=(D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
   D.sport.push({id:maxId+1,date:date,km:km,type:type,note:note});
-  document.getElementById('s-km').value=''; document.getElementById('s-note').value='';
-  await saveDB(); renderSport(); renderMetrics();
+  document.getElementById('s-km').value='';document.getElementById('s-note').value='';
+  await saveDB();renderSport();renderMetrics();
+  var fb=document.getElementById('s-feedback');fb.textContent='✓ '+(km>0?km+'km ':'')+type+' ajoute pour le '+date;fb.style.display='block';setTimeout(function(){fb.style.display='none';},3000);
 }
-
-function renderProgression() {
-  var cands = D.candidatures||[]; var sport = D.sport||[];
-  var allC = Object.values(D.checks||{}).flatMap(function(d){return Object.values(d);});
-  var done = allC.filter(Boolean).length; var tot = allC.length;
-  var progs = [
-    {l:'Anthropic Academy',v:60,note:'S1 en cours',col:'#378ADD'},
-    {l:'Data - Power BI / SQL',v:75,note:'Module termine',col:'#7F77DD'},
-    {l:'3D / Modelisme CLO',v:30,note:'Base blouse',col:'#c8603a'},
-    {l:'Italien',v:35,note:'A2 en progression',col:'#c4973a'},
-    {l:'Candidatures',v:Math.min(Math.round(cands.length/50*100),100),note:cands.length+'/50 objectif',col:'#D85A30'},
-    {l:'Sport - 10km sous 1h',v:Math.min(sport.length*3,40),note:'Record 1h22 → 1h00',col:'#2d5a3d'},
-    {l:'6-pack',v:Math.min(sport.filter(function(s){return s.type==='Abs/Gainage'||s.type==='Renfo bas';}).length*5,100),note:'Seances renfo',col:'#c8603a'},
-    {l:'Taches quotidiennes',v:tot>0?Math.round(done/tot*100):0,note:done+'/'+tot+' cochees',col:'#1c1a16'},
-  ];
-  document.getElementById('all-prog').innerHTML = progs.map(function(p){
-    return '<div class="pw"><div class="ph"><span>'+p.l+'</span><span>'+p.note+' — <strong>'+p.v+'%</strong></span></div><div class="pbar"><div class="pfill" style="width:'+p.v+'%;background:'+p.col+'"></div></div></div>';
+ 
+async function delSport(id){
+  if(confirm('Supprimer cette seance ?')){
+    D.sport=(D.sport||[]).filter(function(s){return s.id!==id;});
+    await saveDB();renderSport();renderMetrics();
+  }
+}
+ 
+// PROGRAMMES
+function renderProg(){
+  document.getElementById('ptabs').innerHTML=PROG_KEYS.map(function(k){
+    var p=PROGS[k];
+    return'<button class="ptab'+(k===currentProg?' on':'')+'" onclick="switchProg(\"'+k+'\",this)" style="'+(k===currentProg?'color:'+p.col+';border-bottom-color:'+p.col:'')+'">'+p.label+'</button>';
   }).join('');
-  var now = new Date(); var html = '';
+  var p=PROGS[currentProg];
+  var key='__prog_'+currentProg+'__';
+  var customWeeks=(D.notes&&D.notes[key])?JSON.parse(D.notes[key]):[];
+  var allWeeks=p.weeks.concat(customWeeks);
+  document.getElementById('prog-body').innerHTML='<div class="card">'+
+    allWeeks.map(function(w,i){
+      var isCustom=i>=p.weeks.length;
+      var ci=i-p.weeks.length;
+      return'<div class="week-block'+(w.now?' now':'')+'" style="'+(isCustom?'border-left-color:#c4973a':'')+'">'+
+        '<div class="week-n" style="display:flex;justify-content:space-between;align-items:center">'+
+        '<span>'+w.n+(w.now?'<span class="now-pill">En cours</span>':'')+'</span>'+
+        (isCustom?'<button onclick="delProgWeek(\"'+key+'\",'+ci+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px">✕ Supprimer</button>':'')
+        +'</div>'+
+        '<div class="week-prog-title">'+w.title+'</div>'+
+        '<ul class="week-items">'+w.items.map(function(item){
+          return'<li>'+item+'</li>';
+        }).join('')+'</ul></div>';
+    }).join('')+'</div>';
+}
+ 
+function switchProg(k,btn){
+  currentProg=k;
+  document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('on');t.style.color='';t.style.borderBottomColor='';});
+  btn.classList.add('on');btn.style.color=PROGS[k].col;btn.style.borderBottomColor=PROGS[k].col;
+  renderProg();
+}
+ 
+// PROGRESSION
+function renderProgression(){
+  var cands=D.candidatures||[];var sport=D.sport||[];
+  // Calculs réels depuis les checks
+  var allChecks=Object.values(D.checks||{}).flatMap(function(d){return Object.values(d);});
+  var doneAll=allChecks.filter(Boolean).length;var totAll=allChecks.length;
+  var daysActive=Object.keys(D.checks||{}).filter(function(k){return Object.values(D.checks[k]).some(Boolean);}).length;
+  var anthropicDone=Object.values(D.checks||{}).filter(function(d){return d.anthropic;}).length;
+  var dataDone=Object.values(D.checks||{}).filter(function(d){return d.data;}).length;
+  var modelismeDone=Object.values(D.checks||{}).filter(function(d){return d.modelisme;}).length;
+  var italienDone=Object.values(D.checks||{}).filter(function(d){return d.italien;}).length;
+  var coutureDone=Object.values(D.checks||{}).filter(function(d){return d.couture;}).length;
+  var sportDone=Object.values(D.checks||{}).filter(function(d){return d.sport;}).length;
+  // Barres par défaut basées sur les vrais checks
+  var defaultProgs=[
+    {l:'Anthropic Academy',v:Math.min(anthropicDone*10,100),note:anthropicDone+' jours accomplis',col:'#378ADD'},
+    {l:'Data - Power BI / SQL',v:Math.min(dataDone*8+15,100),note:dataDone+' sessions · S1 avancee',col:'#7F77DD'},
+    {l:'3D / Modelisme CLO',v:Math.min(modelismeDone*10,100),note:modelismeDone+' sessions',col:'#c8603a'},
+    {l:'Italien',v:Math.min(italienDone*8+10,100),note:italienDone+' sessions · A2',col:'#c4973a'},
+    {l:'Candidatures',v:Math.min(Math.round(cands.length/50*100),100),note:cands.length+'/50 · '+(D.candidatures||[]).filter(function(c){return c.status==='entretien';}).length+' entretiens',col:'#D85A30'},
+    {l:'Sport - 10km sous 1h',v:Math.min(sportDone*5,40),note:sport.length+' seances · record 1h22',col:'#2d5a3d'},
+    {l:'6-pack',v:Math.min(sport.filter(function(s){return s.type==='Abs/Gainage'||s.type==='Renfo bas';}).length*5,100),note:'seances renfo',col:'#c8603a'},
+    {l:'Couture / portfolio',v:Math.min(coutureDone*12,100),note:coutureDone+' sessions',col:'#5a3d2d'},
+    {l:'Regularity score',v:totAll>0?Math.round(doneAll/totAll*100):0,note:doneAll+'/'+totAll+' taches · '+daysActive+' jours actifs',col:'#1c1a16'},
+  ];
+  var customProgs=D.customProgs||[];
+  var allProgs=defaultProgs.concat(customProgs);
+  document.getElementById('all-prog').innerHTML=allProgs.map(function(p,i){
+    var isCustom=i>=defaultProgs.length;
+    var ci=i-defaultProgs.length;
+    return'<div class="pw" style="display:flex;align-items:center;gap:8px">'+
+      '<div style="flex:1">'+
+      '<div class="ph"><span>'+p.l+'</span><span>'+p.note+' — <strong>'+p.v+'%</strong></span></div>'+
+      '<div class="pbar"><div class="pfill" style="width:'+p.v+'%;background:'+p.col+'"></div></div>'+
+      (isCustom?'<div style="display:flex;gap:6px;margin-top:4px"><input type="range" min="0" max="100" value="'+p.v+'" style="flex:1" oninput="updateProgVal('+ci+',this.value);this.nextSibling.textContent=this.value+'%'"><span style="font-size:11px;color:#6b6456;width:35px">'+p.v+'%</span><button onclick="delProgObj('+ci+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px">✕</button></div>':'')
+      +'</div></div>';
+  }).join('');
+  var now=new Date();var html='';
   for(var i=83;i>=0;i--){
     var d=new Date(now);d.setDate(now.getDate()-i);
     var k=fmt(d);var checks=(D.checks||{})[k]||{};
     var n=Object.values(checks).filter(Boolean).length;
     var lvl=n===0?0:n<=2?1:n<=4?2:n<=6?3:4;
-    html+='<div class="hm-d'+(lvl>0?' l'+lvl:'')+'" title="'+k+' - '+n+' taches"></div>';
+    html+='<div class="hm-d'+(lvl>0?' l'+lvl:'')+'" title="'+k+' - '+n+' taches" onclick="openDayModal(\"'+k+'\")" ></div>';
   }
-  document.getElementById('heatmap').innerHTML = html;
-}
-
-// CHAT LOCAL
-function addChatMsg(role, text, isAction) {
-  var box = document.getElementById('chat-messages');
-  if(!box) return;
-  var w = document.createElement('div');
-  w.className = 'chat-msg ' + (role==='user'?'user':(isAction?'act':'bot'));
-  var b = document.createElement('div');
-  b.className = 'chat-bubble';
-  b.innerHTML = text.replace(/\n/g,'<br>');
-  w.appendChild(b); box.appendChild(w);
-  box.scrollTop = box.scrollHeight;
-}
-
-function sendChat() {
-  var inp = document.getElementById('chat-input');
-  var msg = inp.value.trim(); if(!msg) return;
-  inp.value = '';
-  addChatMsg('user', msg, false);
-  var m = msg.toLowerCase();
-  var acted = false; var response = '';
-
-  // Detecter entreprise
-  var knownCo = {ltd:'LTD',jacquemus:'Jacquemus',sandro:'Sandro',carven:'Carven',undiz:'Undiz',eres:'ERES',sintel:'Sintel',marey:'Atelier Marey',slip:'Le Slip Francais',keit:'KEIT',tequila:'Tequila',basoches:'BASOCHES',frankie:'The Frankie Shop'};
-  var foundCo = '';
-  Object.keys(knownCo).forEach(function(k){if(m.indexOf(k)>=0)foundCo=knownCo[k];});
-  if(!foundCo){var up=msg.match(/\b([A-Z][A-Z]{2,})\b/);if(up)foundCo=up[1];}
-  if(!foundCo){var ch=msg.match(/(?:chez|pour|avec)\s+([A-Z][a-zA-Z]{2,})/);if(ch)foundCo=ch[1];}
-
-  // Detecter poste
-  var poste = '';
-  var chargeM = msg.match(/(charg[e|é][e]?\s+de\s+\w+(?:\s+\w+)?)/i);
-  if(chargeM) poste = chargeM[1].trim();
-  if(!poste){var posteM=msg.match(/(?:poste|comme)\s+([^,\.]{3,35}?)(?:\s*,|\s*$)/i);if(posteM)poste=posteM[1].trim();}
-
-  // Type contrat
-  var type = 'CDI';
-  if(m.indexOf('interim')>=0||m.indexOf('intérim')>=0) type='Interim';
-  else if(m.indexOf('freelance')>=0) type='Freelance';
-  else if(m.indexOf('stage')>=0) type='Stage';
-
-  // Salaire
-  var sal = '';
-  var salM = msg.match(/(\d+[Kk](?:\s*(?:brut|net|annuel|mensuel))?)/i);
-  if(salM) sal = salM[1];
-
-  if(m.indexOf('entretien')>=0||m.indexOf('interview')>=0) {
-    var ex = (D.candidatures||[]).find(function(x){return foundCo&&x.name&&x.name.toLowerCase().indexOf(foundCo.toLowerCase())>=0;});
-    if(ex){
-      ex.status='entretien';
-      if(sal) ex.sal=sal;
-      if(poste&&!ex.poste) ex.poste=poste;
-      saveDB(); renderCands(); renderMetrics();
-      response = 'Entretien note pour <strong>'+ex.name+'</strong>'+(poste?' — '+poste:'')+' ('+ex.type+(ex.sal?' · '+ex.sal:'')+') ! Bonne chance 🤞'; setTimeout(function(){goPanel('cand',document.querySelectorAll('.ntab')[2]);},800);
+  document.getElementById('heatmap').innerHTML=html;
+  // TACHES NON COCHEES AUJOURD'HUI
+  var tk = todayKey();
+  var todayChecks = (D.checks||{})[tk] || {};
+  var allTasks2 = TASKS.concat(D.customTasks||[]);
+  var unchecked = allTasks2.filter(function(t){return !todayChecks[t.id];});
+  var uc = document.getElementById('unchecked-today');
+  if(uc){
+    if(unchecked.length===0){
+      uc.innerHTML='<div style="font-size:13px;color:#2d5a3d;padding:8px 0">🎉 Toutes les taches sont cochees !</div>';
     } else {
-      var maxId = (D.candidatures||[]).reduce(function(m,c){return Math.max(m,c.id||0);},0);
-      var nc = {id:maxId+1,name:foundCo||'Entreprise',poste:poste,type:type,status:'entretien',notes:msg,date:fmt(new Date()),sal:sal};
-      if(!D.candidatures) D.candidatures=[];
-      D.candidatures.push(nc);
-      saveDB(); renderCands(); renderMetrics();
-      response = 'Entretien ajoute : <strong>'+nc.name+'</strong>'+(nc.poste?' — '+nc.poste:'')+' ('+nc.type+(sal?' · '+sal:'')+') 🤞 Je t\'ouvre les candidatures...'; setTimeout(function(){goPanel('cand',document.querySelectorAll('.ntab')[2]);},800);
+      uc.innerHTML=unchecked.map(function(t){
+        return'<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(28,26,22,0.06)">'+
+          '<div style="width:18px;height:18px;border:1px solid rgba(28,26,22,0.2);border-radius:2px;flex-shrink:0"></div>'+
+          '<div><div style="font-size:13px;font-weight:500">'+t.label+'</div><div style="font-size:11px;color:#6b6456">'+t.sub+'</div></div>'+
+          '</div>';
+      }).join('');
     }
-    acted = true;
-  } else if(m.indexOf('refus')>=0) {
-    var ex = (D.candidatures||[]).find(function(x){return foundCo&&x.name&&x.name.toLowerCase().indexOf(foundCo.toLowerCase())>=0;});
-    if(ex){ex.status='refus';saveDB();renderCands();renderMetrics();response='Refus note pour <strong>'+ex.name+'</strong>. La prochaine sera mieux 💪';}
-    else response = 'Entreprise non trouvee. Verifie dans Candidatures.';
-    acted = true;
-  } else if(m.indexOf('relance')>=0) {
-    var ex = (D.candidatures||[]).find(function(x){return foundCo&&x.name&&x.name.toLowerCase().indexOf(foundCo.toLowerCase())>=0;});
-    if(ex){ex.status='relance';saveDB();renderCands();renderMetrics();response='Relance notee pour <strong>'+ex.name+'</strong> 👍';acted=true;}
-  } else if(m.indexOf('candidature')>=0||m.indexOf('postul')>=0||m.indexOf('envoy')>=0) {
-    var maxId = (D.candidatures||[]).reduce(function(m,c){return Math.max(m,c.id||0);},0);
-    var nc = {id:maxId+1,name:foundCo||'?',poste:poste,type:type,status:'envoyee',notes:'',date:fmt(new Date()),sal:sal};
-    if(!D.candidatures) D.candidatures=[];
-    D.candidatures.push(nc);
-    saveDB(); renderCands(); renderMetrics();
-    response = 'Candidature ajoutee : <strong>'+nc.name+'</strong>'+(nc.poste?' — '+nc.poste:'')+' ('+nc.type+(sal?' · '+sal:'')+') 💼'; setTimeout(function(){goPanel('cand',document.querySelectorAll('.ntab')[2]);},800);
-    acted = true;
-  } else if(m.indexOf('run')>=0||m.indexOf('km')>=0||m.indexOf('couru')>=0) {
-    var kmM = msg.match(/(\d+(?:[.,]\d+)?)\s*km/i);
-    var km = kmM ? parseFloat(kmM[1].replace(',','.')) : 0;
-    var st = 'Run Z2';
-    if(m.indexOf('long')>=0) st='Run long';
-    else if(m.indexOf('fraction')>=0) st='Run fractionne';
-    var maxId = (D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
-    D.sport.push({id:maxId+1,date:fmt(new Date()),km:km,type:st,note:msg});
-    saveDB(); renderMetrics();
-    response = (km>0?km+'km ':'')+st+' ajoute ! '+(km>=8?'Excellente perf 🔥':km>=5?'Bien joue 💪':'Continue 🏃');
-    acted = true;
-  } else if(m.indexOf('renfo')>=0||m.indexOf('abs')>=0||m.indexOf('gainage')>=0||m.indexOf('muscu')>=0) {
-    var st = (m.indexOf('abs')>=0||m.indexOf('gainage')>=0) ? 'Abs/Gainage' : 'Renfo bas';
-    var maxId = (D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
-    D.sport.push({id:maxId+1,date:fmt(new Date()),km:0,type:st,note:msg});
-    saveDB(); renderMetrics();
-    response = 'Seance <strong>'+st+'</strong> ajoutee ! 💪';
-    acted = true;
   }
-
-  if(!acted) {
-    response = foundCo ? 'Entreprise detectee: '+foundCo+'. Dis-moi: entretien, candidature ou refus?' :
-      'Essaie:<br>· "Entretien chez LTD pour chargee de production interim 45K"<br>· "Candidature Jacquemus CDI"<br>· "Refus de Carven" · "Run 8km"';
+ 
+  // HISTORIQUE 30 JOURS PAR TACHE
+  var th = document.getElementById('task-history');
+  if(th){
+    var now2 = new Date();
+    var taskStats = {};
+    allTasks2.forEach(function(t){taskStats[t.id]={label:t.label,done:0,total:0};});
+    for(var i=0;i<30;i++){
+      var d=new Date(now2);d.setDate(now2.getDate()-i);
+      var dk=fmt(d);
+      var dayChecks=(D.checks||{})[dk]||{};
+      allTasks2.forEach(function(t){
+        if(!taskStats[t.id])taskStats[t.id]={label:t.label,done:0,total:0};
+        taskStats[t.id].total++;
+        if(dayChecks[t.id])taskStats[t.id].done++;
+      });
+    }
+    var rows='';
+    Object.values(taskStats).forEach(function(s){
+      var pct=s.total>0?Math.round(s.done/s.total*100):0;
+      var col=pct>=80?'#2d5a3d':pct>=50?'#c4973a':'#c8603a';
+      rows+='<div style="display:grid;grid-template-columns:180px 1fr 50px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid rgba(28,26,22,0.06)">'+
+        '<span style="font-size:12px;font-weight:500">'+s.label+'</span>'+
+        '<div style="background:#f0efe9;height:8px;border-radius:99px;overflow:hidden"><div style="height:100%;background:'+col+';width:'+pct+'%;border-radius:99px;transition:width .5s"></div></div>'+
+        '<span style="font-family:DM Mono,monospace;font-size:11px;color:'+col+'">'+pct+'%</span>'+
+        '</div>';
+    });
+    th.innerHTML=rows||'<div style="font-size:13px;color:#b0a898;padding:8px 0">Pas encore de données</div>';
   }
-  addChatMsg('assistant', response, acted);
+ 
 }
-
-setTimeout(function(){
-  var box = document.getElementById('chat-messages');
-  if(box && box.children.length===0) {
-    addChatMsg('assistant','Bonjour Giovana ! Dis-moi ce qui se passe — candidature, entretien, sport ? Je mets le dashboard a jour automatiquement.',false);
+ 
+ 
+// ── MOTIV PERSONNALISABLE ────────────────────────────────────────────────
+function renderMotiv() {
+  var now = new Date();
+  var custom = (D.notes||{})['__motiv__'] || '';
+  var inp = document.getElementById('motiv-input');
+  if(!inp) return;
+  if(custom) {
+    inp.value = custom;
+  } else {
+    inp.value = '';
+    inp.placeholder = MOTIVS[now.getDay() % MOTIVS.length];
   }
-},500);
-
-document.addEventListener('keydown', function(e){if(e.key==='Enter'&&e.target.id==='c-name')addCand();});
-
+}
+var motivTimer = null;
+async function saveMotivLive(v) {
+  if(motivTimer) clearTimeout(motivTimer);
+  motivTimer = setTimeout(async function() {
+    if(!D.notes) D.notes = {};
+    D.notes['__motiv__'] = v;
+    await saveDB();
+  }, 800);
+}
+async function resetMotiv() {
+  if(!D.notes) D.notes = {};
+  D.notes['__motiv__'] = '';
+  await saveDB();
+  renderMotiv();
+}
+ 
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.id==='c-name')addCand();});
 loadDB();
 </script>
 </body>
