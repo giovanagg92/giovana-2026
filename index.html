@@ -2,6 +2,11 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Giovana 2026">
+<meta name="theme-color" content="#1c1a16">
+<link rel="apple-touch-icon" href="https://via.placeholder.com/180x180/1c1a16/faf9f6?text=G">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Giovana 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
@@ -184,9 +189,28 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
   .week-col{padding:5px;min-height:80px}
   .week-event{display:none}
 }
+ 
+.login-screen{position:fixed;inset:0;background:#faf9f6;z-index:9999;display:flex;align-items:center;justify-content:center}
+.login-box{text-align:center;padding:2rem}
+.login-title{font-family:'Playfair Display',serif;font-size:42px;font-weight:400;letter-spacing:-2px;margin-bottom:8px}
+.login-sub{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456;letter-spacing:.2em;text-transform:uppercase;margin-bottom:2rem}
+.login-input{font-size:16px;padding:12px 16px;border:1px solid rgba(28,26,22,0.2);background:#fff;color:#1c1a16;font-family:'DM Sans',sans-serif;outline:none;border-radius:2px;width:220px;text-align:center;letter-spacing:.1em}
+.login-input:focus{border-color:#1c1a16}
+.login-btn{display:block;margin:12px auto 0;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:10px 24px;border:1px solid #1c1a16;background:#1c1a16;color:#faf9f6;cursor:pointer;border-radius:2px;width:220px}
+.login-err{font-size:12px;color:#c8603a;margin-top:8px;font-family:'DM Mono',monospace;display:none}
 </style>
 </head>
 <body>
+ 
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-title">Giovana</div>
+    <div class="login-sub">Objectifs & Progression 2026</div>
+    <input class="login-input" type="password" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkLogin()">
+    <button class="login-btn" onclick="checkLogin()">Entrer</button>
+    <div class="login-err" id="login-err">Mot de passe incorrect</div>
+  </div>
+</div>
  
 <div class="masthead">
   <div class="masthead-left">
@@ -490,6 +514,14 @@ async function loadDB(){
     if(local)D=Object.assign({},D,JSON.parse(local));
     else{D.candidatures=defaultCands();D.sport=defaultSport();}
   }
+  // Reset blocs masques chaque nouveau jour
+  var lastReset = localStorage.getItem('g26_reset');
+  var today = fmt(new Date());
+  if(lastReset !== today){
+    D.hiddenSlots = [];
+    localStorage.setItem('g26_reset', today);
+    await saveDB();
+  }
   renderAll();
 }
  
@@ -625,19 +657,27 @@ function renderTodaySlots(){
   if(dl)dl.textContent=DL[Math.min(di,6)]+' '+todayKey();
   var el=document.getElementById('today-slots');if(!el)return;
   var html='';
-  SLOTS.forEach(function(s){
-    html+='<div class="slot"><span class="slot-time">'+s.time+'</span><div>';
-    html+='<div class="slot-label'+(s.hl?' hl':'')+'">'+s.label+' <span class="slot-sub">'+s.sub+'</span></div>';
+  var hiddenSlots=D.hiddenSlots||[];
+  SLOTS.forEach(function(s,i){
+    if(hiddenSlots.indexOf(i)>=0)return;
+    html+='<div class="slot"><span class="slot-time">'+s.time+'</span><div style="flex:1">';
+    html+='<div class="slot-label'+(s.hl?' hl':'')+'" style="display:flex;justify-content:space-between;align-items:flex-start">';
+    html+='<span>'+s.label+' <span class="slot-sub">'+s.sub+'</span></span>';
+    html+='<button onclick="hideSlot('+i+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px;margin-left:8px;flex-shrink:0" title="Masquer">✕</button>';
+    html+='</div>';
     if(s.neuro)html+='<div class="slot-neuro">🧠 '+s.neuro+'</div>';
     html+='</div></div>';
   });
   (D.customSlots||[]).forEach(function(s,i){
-    html+='<div class="slot" style="background:#f9f9f7"><span class="slot-time">'+s.time+'</span><div>';
-    html+='<div class="slot-label'+(s.hl?' hl':'')+'" style="display:flex;justify-content:space-between">';
+    html+='<div class="slot" style="background:#f9f9f7"><span class="slot-time">'+s.time+'</span><div style="flex:1">';
+    html+='<div class="slot-label'+(s.hl?' hl':'')+'" style="display:flex;justify-content:space-between;align-items:flex-start">';
     html+='<span>'+s.label+(s.sub?' <span class="slot-sub">'+s.sub+'</span>':'')+'</span>';
-    html+='<button onclick="delSlot('+i+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px;padding:0">✕</button>';
+    html+='<button onclick="delSlot('+i+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px;margin-left:8px;flex-shrink:0">✕</button>';
     html+='</div></div></div>';
   });
+  if((hiddenSlots.length>0)){
+    html+='<div style="margin-top:8px"><button onclick="restoreSlots()" style="font-size:11px;font-family:DM Mono,monospace;background:none;border:1px solid rgba(28,26,22,0.2);padding:3px 10px;cursor:pointer;border-radius:2px;color:#6b6456">↺ Restaurer tous les blocs ('+hiddenSlots.length+' masques)</button></div>';
+  }
   el.innerHTML=html;
 }
  
@@ -963,26 +1003,73 @@ async function delSport(id){
 function renderProg(){
   document.getElementById('ptabs').innerHTML=PROG_KEYS.map(function(k){
     var p=PROGS[k];
-    return'<button class="ptab'+(k===currentProg?' on':'')+'" onclick="switchProg(\"'+k+'\",this)" style="'+(k===currentProg?'color:'+p.col+';border-bottom-color:'+p.col:'')+'">'+p.label+'</button>';
+    return '<button class="ptab'+(k===currentProg?' on':'')+'" onclick="switchProg(\"'+k+'\",this)" style="'+(k===currentProg?'color:'+p.col+';border-bottom-color:'+p.col:'')+'">' + p.label + '</button>';
   }).join('');
   var p=PROGS[currentProg];
   var key='__prog_'+currentProg+'__';
+  var hiddenKey='__phide_'+currentProg+'__';
   var customWeeks=(D.notes&&D.notes[key])?JSON.parse(D.notes[key]):[];
-  var allWeeks=p.weeks.concat(customWeeks);
-  document.getElementById('prog-body').innerHTML='<div class="card">'+
-    allWeeks.map(function(w,i){
-      var isCustom=i>=p.weeks.length;
-      var ci=i-p.weeks.length;
-      return'<div class="week-block'+(w.now?' now':'')+'" style="'+(isCustom?'border-left-color:#c4973a':'')+'">'+
-        '<div class="week-n" style="display:flex;justify-content:space-between;align-items:center">'+
-        '<span>'+w.n+(w.now?'<span class="now-pill">En cours</span>':'')+'</span>'+
-        (isCustom?'<button onclick="delProgWeek(\"'+key+'\",'+ci+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px">✕ Supprimer</button>':'')
-        +'</div>'+
-        '<div class="week-prog-title">'+w.title+'</div>'+
-        '<ul class="week-items">'+w.items.map(function(item){
-          return'<li>'+item+'</li>';
-        }).join('')+'</ul></div>';
-    }).join('')+'</div>';
+  var hiddenWeeks=(D.notes&&D.notes[hiddenKey])?JSON.parse(D.notes[hiddenKey]):[];
+  var allWeeks=p.weeks.map(function(w,i){return {n:w.n,title:w.title,items:w.items.slice(),now:w.now,_idx:i,_custom:false};})
+    .concat(customWeeks.map(function(w,i){return {n:w.n,title:w.title,items:(w.items||[]).slice(),now:false,_idx:p.weeks.length+i,_custom:true,_ci:i};}));
+  var html='<div class="card">';
+  allWeeks.forEach(function(w){
+    if(hiddenWeeks.indexOf(w._idx)>=0)return;
+    var wid='w'+w._idx;
+    var cust=w._custom?'true':'false';
+    html+='<div class="week-block'+(w.now?' now':'')+'" style="'+(w._custom?'border-left-color:#c4973a':'')+';margin-bottom:20px">';
+    html+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">';
+    html+='<input class="pinp" data-idx="'+w._idx+'" data-cust="'+cust+'" data-f="n" value="'+w.n.replace(/"/g,'&quot;')+'" style="font-family:DM Mono,monospace;font-size:10px;color:#b0a898;background:transparent;border:none;outline:none;flex:1;text-transform:uppercase;letter-spacing:.06em">';
+    if(w.now)html+='<span class="now-pill">En cours</span>';
+    html+='<button onclick="hideProgWeek('+w._idx+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px">✕</button>';
+    html+='</div>';
+    html+='<input class="pinp" data-idx="'+w._idx+'" data-cust="'+cust+'" data-f="title" value="'+w.title.replace(/"/g,'&quot;')+'" style="font-family:Playfair Display,serif;font-size:14px;color:#1c1a16;background:transparent;border:none;outline:none;width:100%;margin-bottom:8px">';
+    html+='<ul style="list-style:none">';
+    (w.items||[]).forEach(function(item,ii){
+      html+='<li style="display:flex;align-items:center;gap:4px;padding:2px 0">';
+      html+='<span style="color:#b0a898;font-size:14px">·</span>';
+      html+='<input class="pinp" data-idx="'+w._idx+'" data-cust="'+cust+'" data-f="item" data-ii="'+ii+'" value="'+item.replace(/"/g,'&quot;')+'" style="font-size:12px;color:#6b6456;background:transparent;border:none;outline:none;flex:1">';
+      html+='<button onclick="delProgItem('+w._idx+','+ii+','+cust+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:10px;padding:0 2px">✕</button>';
+      html+='</li>';
+    });
+    html+='</ul>';
+    html+='<div style="display:flex;gap:4px;margin-top:6px">';
+    html+='<input id="ni_'+wid+'" type="text" style="font-size:12px;padding:4px 8px;border:1px solid rgba(28,26,22,0.15);background:#f5f4f0;color:#1c1a16;outline:none;border-radius:2px;flex:1" placeholder="+ Nouvelle tache...">';
+    html+='<button onclick="addProgItemInline('+w._idx+','+cust+',this.previousSibling)" style="font-size:10px;padding:4px 8px;background:#1c1a16;color:#faf9f6;border:none;cursor:pointer;border-radius:2px">+</button>';
+    html+='</div>';
+    html+='</div>';
+  });
+  if(hiddenWeeks.length>0){
+    html+='<div style="margin-top:8px"><button onclick="restoreProgWeeks()" style="font-size:11px;font-family:DM Mono,monospace;background:none;border:1px solid rgba(28,26,22,0.2);padding:3px 10px;cursor:pointer;border-radius:2px;color:#6b6456">↺ Restaurer ('+hiddenWeeks.length+' masquees)</button></div>';
+  }
+  html+='</div>';
+  document.getElementById('prog-body').innerHTML=html;
+  // Attacher les events aux inputs
+  document.querySelectorAll('.pinp').forEach(function(inp){
+    inp.addEventListener('blur',function(){
+      var idx=parseInt(this.dataset.idx);
+      var cust=this.dataset.cust==='true';
+      var f=this.dataset.f;
+      var ii=this.dataset.ii!==undefined?parseInt(this.dataset.ii):-1;
+      var val=this.value;
+      if(f==='n')saveProgWeekN(idx,val,cust);
+      else if(f==='title')saveProgWeekTitle(idx,val,cust);
+      else if(f==='item')saveProgItem(idx,ii,val,cust);
+    });
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){this.blur();}
+    });
+  });
+  // Enter sur les champs d ajout
+  document.querySelectorAll('[id^="ni_"]').forEach(function(inp){
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){
+        var wid=this.id.replace('ni_w','');
+        var btn=this.nextElementSibling;
+        if(btn)btn.click();
+      }
+    });
+  });
 }
  
 function switchProg(k,btn){
@@ -1116,6 +1203,28 @@ async function resetMotiv() {
   D.notes['__motiv__'] = '';
   await saveDB();
   renderMotiv();
+}
+ 
+ 
+// ── LOGIN ────────────────────────────────────────────────────────────────
+var PWD = '@606021@';
+function checkLogin(){
+  var v = document.getElementById('login-pwd').value;
+  if(v === PWD){
+    document.getElementById('login-screen').style.display='none';
+    localStorage.setItem('g26_auth','1');
+  } else {
+    var err = document.getElementById('login-err');
+    err.style.display='block';
+    document.getElementById('login-pwd').value='';
+    setTimeout(function(){err.style.display='none';},2000);
+  }
+}
+// Auto-login si déjà authentifié
+if(localStorage.getItem('g26_auth')==='1'){
+  document.addEventListener('DOMContentLoaded',function(){
+    document.getElementById('login-screen').style.display='none';
+  });
 }
  
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.id==='c-name')addCand();});
