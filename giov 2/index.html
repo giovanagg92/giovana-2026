@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giovana 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-height:100vh}
+.masthead{border-bottom:2px solid #1c1a16;padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.masthead-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:400;letter-spacing:-1px}
+.masthead-right{text-align:right}
+.date-lbl{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456;text-transform:uppercase;letter-spacing:.08em}
+.streak-badge{display:inline-flex;align-items:center;gap:5px;background:#FAEEDA;color:#633806;font-size:12px;font-weight:600;padding:4px 12px;border-radius:99px;margin-top:4px}
+.nav{display:flex;border-bottom:1px solid rgba(28,26,22,0.12);padding:0 2rem;background:#fff;overflow-x:auto}
+.nav::-webkit-scrollbar{display:none}
+.ntab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:12px 16px;border:none;background:transparent;color:#6b6456;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.ntab.on{color:#1c1a16;border-bottom-color:#1c1a16;font-weight:500}
+.page{max-width:960px;margin:0 auto;padding:1.5rem}
+.panel{display:none}.panel.on{display:block}
+.motiv-box{border-left:3px solid #c8603a;padding:12px 18px;background:#fff;border:1px solid rgba(200,96,58,0.2);border-left:3px solid #c8603a;margin-bottom:1.25rem;border-radius:2px}
+.motiv-q{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:#1c1a16;line-height:1.5}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(28,26,22,0.1);border:1px solid rgba(28,26,22,0.1);margin-bottom:1.25rem}
+.met{background:#fff;padding:1.2rem 1.5rem;border-top:2px solid rgba(28,26,22,0.08)}
+.met.acc{border-top-color:#c8603a}.met.acc2{border-top-color:#2d5a3d}.met.gold{border-top-color:#c4973a}
+.met-l{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#b0a898;margin-bottom:6px}
+.met-v{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#1c1a16;line-height:1}
+.met-s{font-size:11px;color:#6b6456;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.card{background:#fff;border:1px solid rgba(28,26,22,0.08);padding:1.25rem;margin-bottom:1.25rem}
+.card-h{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#b0a898;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center}
+.slot{display:grid;grid-template-columns:90px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid rgba(28,26,22,0.06)}
+.slot:last-child{border-bottom:none}
+.slot-time{font-family:'DM Mono',monospace;font-size:11px;color:#b0a898;padding-top:2px}
+.slot-label{font-size:13px;font-weight:500;color:#1c1a16}
+.slot-label.hl{color:#c8603a}
+.slot-sub{font-size:11px;color:#6b6456;margin-top:2px}
+.slot-neuro{font-size:10px;color:#b0a898;font-style:italic;margin-top:2px}
+.ci{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(28,26,22,0.06)}
+.ci:last-child{border-bottom:none}
+.cb{width:20px;height:20px;min-width:20px;border:1px solid rgba(28,26,22,0.2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;font-size:12px;border-radius:2px}
+.cb.done{background:#2d5a3d;border-color:#2d5a3d;color:#fff}
+.ci-label{font-size:13px;font-weight:500}
+.ci-sub{font-size:11px;color:#6b6456;margin-top:2px}
+.pw{margin-bottom:12px}
+.ph{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;color:#1c1a16}
+.ph span:last-child{font-family:'DM Mono',monospace;font-size:11px;color:#6b6456}
+.pbar{height:5px;background:#f0efe9;border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .5s}
+.cand-item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(28,26,22,0.06)}
+.cand-item:last-child{border-bottom:none}
+.cand-name{font-size:13px;font-weight:500;font-family:'Playfair Display',serif}
+.cand-detail{font-size:12px;color:#6b6456;margin-top:2px}
+.cand-meta{font-size:11px;color:#b0a898;font-family:'DM Mono',monospace;margin-top:2px}
+.status-sel{font-size:11px;font-family:'DM Mono',monospace;padding:3px 8px;border:1px solid;background:transparent;cursor:pointer;border-radius:2px}
+.s-envoyee{border-color:#6b6456;color:#6b6456}
+.s-relance{border-color:#c4973a;color:#c4973a}
+.s-entretien{border-color:#2d5a3d;color:#2d5a3d}
+.s-refus{border-color:#b0a898;color:#b0a898}
+.del-btn{background:none;border:none;cursor:pointer;color:#b0a898;font-size:12px;padding:0}
+.del-btn:hover{color:#c8603a}
+.sport-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(28,26,22,0.06)}
+.sport-row:last-child{border-bottom:none}
+.sport-date{font-family:'DM Mono',monospace;font-size:11px;color:#b0a898;width:90px;flex-shrink:0}
+.sport-info{flex:1}
+.sport-km{font-size:13px;font-weight:500}
+.sport-type{font-size:11px;color:#6b6456}
+.sport-bar{height:4px;background:#f0efe9;flex:1;border-radius:99px;overflow:hidden}
+.sport-fill{height:100%;background:#2d5a3d;border-radius:99px}
+.ar{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.inp{font-size:13px;padding:8px 10px;border:1px solid rgba(28,26,22,0.15);background:#f5f4f0;color:#1c1a16;font-family:'DM Sans',sans-serif;outline:none;border-radius:2px}
+.inp:focus{border-color:#1c1a16}
+.inp.w{flex:1;min-width:100px}
+.inp.n{width:70px}
+.btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:8px 16px;border:1px solid #1c1a16;background:transparent;color:#1c1a16;cursor:pointer;border-radius:2px;white-space:nowrap}
+.btn:hover{background:#1c1a16;color:#faf9f6}
+.btn.primary{background:#1c1a16;color:#faf9f6}
+.btn.primary:hover{opacity:.85}
+.note-area{width:100%;margin-top:10px;font-size:13px;padding:10px;border:1px solid rgba(28,26,22,0.15);background:#f5f4f0;color:#1c1a16;font-family:'DM Sans',sans-serif;resize:vertical;min-height:60px;outline:none;line-height:1.6;border-radius:2px}
+.note-area:focus{border-color:#1c1a16}
+.heatmap{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
+.hm-d{width:13px;height:13px;background:#f0efe9;border-radius:2px}
+.hm-d.l1{background:#a8d5b8}.hm-d.l2{background:#5daa7a}.hm-d.l3{background:#2d7a4a}.hm-d.l4{background:#2d5a3d}
+.week-block{padding-left:16px;border-left:1px solid rgba(28,26,22,0.12);margin-bottom:18px}
+.week-block.now{border-left:2px solid #2d5a3d}
+.week-n{font-family:'DM Mono',monospace;font-size:10px;color:#b0a898;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.now-pill{background:#2d5a3d;color:#fff;font-size:9px;padding:2px 6px;border-radius:2px}
+.week-title{font-family:'Playfair Display',serif;font-size:14px;margin-bottom:5px}
+.week-items{list-style:none}
+.week-items li{font-size:12px;color:#6b6456;padding:2px 0 2px 12px;position:relative;line-height:1.5}
+.week-items li::before{content:'·';position:absolute;left:0;color:#b0a898}
+.ptab-nav{display:flex;gap:0;border-bottom:1px solid rgba(28,26,22,0.1);margin-bottom:1.25rem;flex-wrap:wrap}
+.ptab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:8px 14px;background:transparent;border:none;cursor:pointer;color:#6b6456;border-bottom:2px solid transparent;margin-bottom:-1px}
+.ptab.on{color:#1c1a16;border-bottom-color:#c8603a}
+.chat-msg{display:flex;margin-bottom:10px}
+.chat-msg.user{justify-content:flex-end}
+.chat-bubble{max-width:80%;padding:10px 14px;font-size:13px;line-height:1.5;border-radius:2px}
+.chat-msg.user .chat-bubble{background:#1c1a16;color:#faf9f6}
+.chat-msg.bot .chat-bubble{background:#fff;border:1px solid rgba(28,26,22,0.1);color:#1c1a16}
+.chat-msg.act .chat-bubble{background:#f0f8f4;border:1px solid #2d5a3d;color:#1c1a16}
+.sync-dot{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid rgba(28,26,22,0.2);color:#6b6456}
+.sync-dot.ok{border-color:#2d5a3d;color:#2d5a3d}
+.sync-dot.err{border-color:#c8603a;color:#c8603a}
+@media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.masthead{flex-direction:column;gap:8px}.masthead-title{font-size:28px}}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div>
+    <div class="masthead-title">Giovana 2026</div>
+    <div style="font-size:11px;color:#6b6456;font-style:italic;margin-top:3px" id="motiv-line"></div>
+  </div>
+  <div class="masthead-right">
+    <div class="date-lbl" id="date-lbl"></div>
+    <div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end;align-items:center">
+      <div class="sync-dot" id="sync-dot">● Connexion...</div>
+      <div class="streak-badge">🔥 <span id="streak-val">0</span> jours</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="ntab on" onclick="goPanel('today',this)">Aujourd'hui</button>
+  <button class="ntab" onclick="goPanel('programme',this)">Programmes</button>
+  <button class="ntab" onclick="goPanel('cand',this)">Candidatures</button>
+  <button class="ntab" onclick="goPanel('sport',this)">Sport</button>
+  <button class="ntab" onclick="goPanel('prog',this)">Progression</button>
+  <button class="ntab" onclick="goPanel('chat',this)" style="color:#c8603a">Assistant</button>
+</div>
+
+<div class="page">
+
+<div class="panel on" id="panel-today">
+  <div class="motiv-box" id="motiv-box"><div class="motiv-q" id="motiv-q"></div></div>
+  <div class="metrics" id="metrics"></div>
+  <div class="grid2">
+    <div>
+      <div class="card">
+        <div class="card-h"><span>Planning neuroscience</span><span id="day-label"></span></div>
+        <div id="today-slots"></div>
+      </div>
+      <div class="card">
+        <div class="card-h">Note du jour</div>
+        <textarea class="note-area" id="note-area" placeholder="Ce que j'ai appris · Ce qui était dur · Demain…" oninput="saveNote(this.value)"></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h">Tâches du jour</div>
+      <div id="today-checks"></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel-programme">
+  <div class="ptab-nav" id="ptabs"></div>
+  <div id="prog-body"></div>
+</div>
+
+<div class="panel" id="panel-cand">
+  <div class="metrics" id="cand-metrics"></div>
+  <div class="card">
+    <div class="card-h">Nouvelle candidature</div>
+    <div class="ar">
+      <input class="inp w" type="text" id="c-name" placeholder="Entreprise">
+      <input class="inp w" type="text" id="c-poste" placeholder="Poste">
+      <select id="c-type" class="inp"><option>CDI</option><option>Intérim</option><option>Freelance</option><option>Stage</option></select>
+    </div>
+    <div class="ar">
+      <input class="inp w" type="text" id="c-notes" placeholder="Notes / source">
+      <input class="inp" type="date" id="c-date" style="width:130px">
+      <input class="inp" type="text" id="c-sal" placeholder="Salaire" style="width:90px">
+      <button class="btn primary" onclick="addCand()">+ Ajouter</button>
+    </div>
+  </div>
+  <div class="card" style="margin-top:0">
+    <div class="card-h">
+      <span id="cand-count"></span>
+      <select id="cand-filter" onchange="renderCands()" class="inp" style="font-size:11px;padding:3px 7px">
+        <option value="all">Toutes</option><option value="envoyee">Envoyées</option>
+        <option value="relance">Relance</option><option value="entretien">Entretien</option><option value="refus">Refus</option>
+      </select>
+    </div>
+    <div id="cand-list"></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-sport">
+  <div class="metrics" id="sport-metrics"></div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-h">Ajouter une séance</div>
+      <div class="ar">
+        <input class="inp n" type="number" id="s-km" placeholder="km" min="0" step="0.1">
+        <select id="s-type" class="inp" style="flex:1"><option>Run Z2</option><option>Run fractionné</option><option>Run long</option><option>Renfo bas</option><option>Abs/Gainage</option><option>Marche</option></select>
+        <input class="inp" type="date" id="s-date" style="width:130px">
+      </div>
+      <div class="ar">
+        <input class="inp w" type="text" id="s-note" placeholder="FC, ressenti, allure…">
+        <button class="btn primary" onclick="addSport()">+ Ajouter</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h">Objectifs</div>
+      <div class="pw"><div class="ph"><span>10km en moins d'1h</span><span id="p10k-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-10k" style="background:#2d5a3d"></div></div><div style="font-size:11px;color:#b0a898;margin-top:3px">Record : <strong style="color:#1c1a16">1h22</strong> → cible : <strong style="color:#2d5a3d">1h00</strong></div></div>
+      <div class="pw"><div class="ph"><span>6-pack</span><span id="p6p-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-6p" style="background:#c8603a"></div></div></div>
+      <div class="pw"><div class="ph"><span>Volume mensuel</span><span id="pvol-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-vol" style="background:#c4973a"></div></div></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-h">Historique</div><div id="sport-list"></div></div>
+</div>
+
+<div class="panel" id="panel-prog">
+  <div class="card"><div class="card-h">Progression globale</div><div id="all-prog"></div></div>
+  <div class="card">
+    <div class="card-h">Activité — 12 semaines</div>
+    <div class="heatmap" id="heatmap"></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-chat">
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-h">Comment utiliser</div>
+    <div style="font-size:12px;color:#6b6456;line-height:2">
+      "Entretien chez LTD pour chargée de production intérim 45K"<br>
+      "Candidature Jacquemus CDI styliste" · "Refus de Carven"<br>
+      "Run 8km" · "Renfo abs" · "Relance Undiz"
+    </div>
+  </div>
+  <div id="chat-messages" style="min-height:200px;max-height:400px;overflow-y:auto;margin-bottom:12px"></div>
+  <div style="display:flex;gap:8px">
+    <input class="inp w" type="text" id="chat-input" placeholder="Dis-moi ce qui se passe..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="btn primary" onclick="sendChat()">Envoyer</button>
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SURL = 'https://culyvwdsmpfkmpttatax.supabase.co';
+var SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bHl2d2RzbXBma21wdHRhdGF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0Nzg3OTgsImV4cCI6MjA5NDA1NDc5OH0.V_VgsigcLVWLdTETrW71Exn5njz37y-KMekK4_9-G_c';
+var sb = supabase.createClient(SURL, SKEY);
+var UID = 'giovana_2026';
+
+var D = { checks:{}, notes:{}, streak:0, lastActive:'', candidatures:[], sport:[] };
+
+function fmt(d) { return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+function todayKey() { return fmt(new Date()); }
+function todayIdx() { var d = new Date().getDay(); return d===0?6:d-1; }
+var DLABELS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+
+function setSyncStatus(s) {
+  var el = document.getElementById('sync-dot');
+  if(!el) return;
+  if(s==='ok'){el.className='sync-dot ok';el.textContent='● Synchronisé';}
+  else if(s==='err'){el.className='sync-dot err';el.textContent='● Hors ligne';}
+  else{el.className='sync-dot';el.textContent='● Connexion...';}
+}
+
+async function loadDB() {
+  setSyncStatus('load');
+  try {
+    var res = await sb.from('dashboard_data').select('*').eq('user_id',UID).single();
+    if(res.data) {
+      D = Object.assign({}, D, JSON.parse(res.data.payload));
+    } else {
+      D.candidatures = defaultCands();
+      D.sport = defaultSport();
+      await saveDB();
+    }
+    setSyncStatus('ok');
+  } catch(e) {
+    setSyncStatus('err');
+    var local = localStorage.getItem('db26');
+    if(local) D = Object.assign({}, D, JSON.parse(local));
+    else { D.candidatures = defaultCands(); D.sport = defaultSport(); }
+  }
+  renderAll();
+}
+
+async function saveDB() {
+  setSyncStatus('load');
+  try {
+    await sb.from('dashboard_data').upsert({user_id:UID, payload:JSON.stringify(D), updated_at:new Date().toISOString()}, {onConflict:'user_id'});
+    setSyncStatus('ok');
+  } catch(e) { setSyncStatus('err'); }
+  localStorage.setItem('db26', JSON.stringify(D));
+}
+
+function defaultCands() { return [
+  {id:1,name:'LTD',poste:'Dev. Denim',type:'Freelance',status:'entretien',notes:'',date:'13/04/2026',sal:''},
+  {id:2,name:'Carven',poste:'',type:'CDI',status:'envoyee',notes:'',date:'13/04/2026',sal:''},
+  {id:3,name:'KEIT',poste:'',type:'CDI',status:'entretien',notes:'',date:'18/04/2026',sal:''},
+  {id:4,name:'Undiz',poste:'Acheteuse',type:'CDI',status:'envoyee',notes:'',date:'20/04/2026',sal:''},
+  {id:5,name:'BASOCHES',poste:'Dev Produit',type:'CDI',status:'envoyee',notes:'',date:'20/04/2026',sal:''},
+  {id:6,name:'Sintel',poste:'Acheteuse',type:'CDI',status:'envoyee',notes:'',date:'21/04/2026',sal:''},
+  {id:7,name:'The Frankie Shop',poste:'C. de Produit',type:'CDI',status:'envoyee',notes:'',date:'21/04/2026',sal:''},
+  {id:8,name:'Atelier Marey',poste:'Styliste freelance',type:'Freelance',status:'envoyee',notes:'',date:'04/05/2026',sal:''},
+  {id:9,name:'ERES',poste:'Acheteuse',type:'CDI',status:'envoyee',notes:'',date:'05/05/2026',sal:''},
+  {id:10,name:'Le Slip Francais',poste:'Chargee de production',type:'CDI',status:'envoyee',notes:'',date:'05/05/2026',sal:''},
+]; }
+
+function defaultSport() { return [
+  {id:1,date:'15/04/2026',km:7,type:'Run Z2',note:''},
+  {id:2,date:'16/04/2026',km:7,type:'Run Z2',note:''},
+  {id:3,date:'18/04/2026',km:10,type:'Run long',note:''},
+  {id:4,date:'05/05/2026',km:0,type:'Renfo bas',note:''},
+]; }
+
+var MOTIVS = [
+  'Chaque seance est une brique de la personne que tu construis.',
+  'Le 10km en 1h se construit zone 2 par zone 2.',
+  '2 candidatures par jour. La prochaine est peut-etre la bonne.',
+  'L italien 20 min par jour. Dans 6 mois tu seras fluente.',
+  'CLO 3D + Valentina = double competence rare dans la mode.',
+  'Power BI + SQL dans la mode = profil rare. Continue.',
+  'La couture est ton ancre creative. Protege ce temps.',
+  'L IA que tu apprends aujourd hui sera ton super-pouvoir.'
+];
+
+var SLOTS = [
+  {time:'9h30-10h00',label:'Anthropic Academy',sub:'30 min - module du jour',neuro:'Pic de cortisol = attention max.',hl:true},
+  {time:'10h00-11h30',label:'Data - Power BI / SQL',sub:'90 min - cycle ultradien',neuro:'90 min = concentration profonde naturelle.',hl:false},
+  {time:'11h30-11h50',label:'Pause consolidation',sub:'20 min - pas d ecran',neuro:'L hippocampe encode ce que tu viens d apprendre.',hl:false},
+  {time:'11h50-12h20',label:'Italien - repetition espacee',sub:'30 min - Duolingo + Anki',neuro:'Double encodage matin + soir = retention x3.',hl:false},
+  {time:'13h00-14h00',label:'Dejeuner + sieste 20 min',sub:'Deconnexion totale',neuro:'Power nap = +34% performance (NASA).',hl:false},
+  {time:'14h00-15h30',label:'3D / Modelisme CLO',sub:'90 min - Valentina + CLO',neuro:'14h-16h = pic creatif et moteur.',hl:false},
+  {time:'15h30-15h50',label:'Pause creative',sub:'20 min - mode diffus',neuro:'Le cerveau relie les apprentissages en arriere-plan.',hl:false},
+  {time:'15h50-16h20',label:'Italien - session active',sub:'30 min - shadowing',neuro:'Shadowing = voie royale pour la fluidite.',hl:false},
+  {time:'16h30-17h30',label:'Candidatures',sub:'60 min - min. 2 envoyees',neuro:'10min veille + 20min redaction + 20min envoi + 10min relances.',hl:false},
+  {time:'17h30-18h00',label:'Couture - projet perso',sub:'30 min - toile ou finitions',neuro:'Double encodage avec CLO 3D.',hl:false},
+  {time:'18h30-19h30',label:'Sport - Run Z2 ou Renfo',sub:'Lun/Mer: Run - Mar/Jeu: Renfo - Ven: Run long',neuro:'BDNF post-run consolide tout ce que tu as appris.',hl:false},
+  {time:'21h30-22h00',label:'Bilan du jour',sub:'Dashboard + 3 lignes de note',neuro:'Ecriture reflexive avant sommeil = +30% retention.',hl:false},
+];
+
+var TASKS = [
+  {id:'anthropic',label:'Anthropic Academy',sub:'30 min - module termine'},
+  {id:'data',label:'Data - Power BI / SQL',sub:'90 min'},
+  {id:'modelisme',label:'3D / Modelisme CLO',sub:'90 min'},
+  {id:'candidatures',label:'Candidatures',sub:'60 min - min. 2 envoyees'},
+  {id:'italien',label:'Italien',sub:'2x 30 min'},
+  {id:'couture',label:'Couture',sub:'30 min'},
+  {id:'sport',label:'Sport',sub:'Run ou Renfo'},
+  {id:'bilan',label:'Bilan du jour',sub:'Note + dashboard'},
+];
+
+var PROGS = {
+  data:{label:'Data',weeks:[{n:'S1 - 12/05',now:true,title:'Fondations SQL',items:['SQL : SELECT, WHERE, ORDER BY, GROUP BY','Power BI : revision visuels termines','Excel : tableaux croises dynamiques','Mini-projet : dataset mode reel']},{n:'S2 - 19/05',title:'SQL intermediaire',items:['SQL : JOINs','SQL : sous-requetes','Power BI : modele en etoile','Excel : INDEX/EQUIV']},{n:'S3 - 26/05',title:'SQL avance + Power BI',items:['SQL : fonctions fenetres','Power BI : DAX avance','Dashboard interactif publie','Projet : KPIs marque mode']},{n:'S4 - 02/06',title:'Automatisation',items:['Power Query','Power BI : dataflows','SQL : vues','Python intro : pandas']},{n:'S5 - 09/06',title:'Portfolio',items:['Projet complet KPIs mode','Dashboard Power BI publie','LinkedIn update','5 questions entretien data x mode']}]},
+  modelisme:{label:'3D / Modelisme',weeks:[{n:'S1 - 12/05',now:true,title:'Base blouse + Valentina',items:['Base blouse Valentina','Corrections defauts','CLO : simulation tissu','Premiere blouse 3D rendue']},{n:'S2 - 19/05',title:'Pantalon + ajustements',items:['Base pantalon Valentina','CLO : ajustements morpho','Simulation tissus differents','Toile blouse couture physique']},{n:'S3 - 26/05',title:'Robe + draping',items:['Base robe Valentina','CLO : draping 3D','2 variantes coloris','Documentation portfolio']},{n:'S4 - 02/06',title:'Projet freelance',items:['Patron complet avec grade','Export PDF + DXF','Mini-book 3D 5 pieces','Contact 3 ateliers freelance']},{n:'S5 - 09/06',title:'Specialisation',items:['Maille : patronage elastique','Manteau : bases structurees','Rendu photo-realiste CLO','Portfolio Behance en ligne']}]},
+  italien:{label:'Italien',weeks:[{n:'S1 - 12/05',now:true,title:'Revision + consolidation',items:['Essere, avere, MI PIACE','Accord singulier/pluriel','Duolingo 20 min/jour','10 mots mode/textile Anki']},{n:'S2 - 19/05',title:'Present + mode',items:['Verbes -ARE, -ERE, -IRE','Decrire un vetement','Phrases showroom','ItalianPod101']},{n:'S3 - 26/05',title:'Passe + raconter',items:['Passato prossimo','Raconter une reunion mode','Vocabulaire production','2 min de presentation en italien']},{n:'S4 - 02/06',title:'Futur + pro',items:['Futuro semplice','Email fournisseur en italien','Vogue Italia','Shadowing YouTube']},{n:'S5 - 09/06',title:'Conversation',items:['Conditionnel','Simulation appel fournisseur','Serie italienne sous-titres IT','Test B1 en ligne']}]},
+  sport:{label:'Sport',weeks:[{n:'S1 - 12/05',now:true,title:'Zone 2 + renfo',items:['Lun : Renfo - squats bulgares, hip thrust, planche','Mar : Run 5km Z2 (FC 125-154)','Mer : Abs intense','Jeu : Run 5km qualitatif','Ven : Run long 8km Z2','1600 kcal / 100g proteines / creatine 3g']},{n:'S2 - 19/05',title:'Volume + fractionne',items:['Mar : Run 6km Z2','Jeu : Fractionne 6x400m','Ven : Run long 9km','Fentes laterales + RDL']},{n:'S3 - 26/05',title:'Endurance',items:['Jeu : Tempo 4km a 6:15/km','Ven : Run long 10km (premiere fois !)','Planche 3x45s chaque matin','Photos progression']},{n:'S4 - 02/06',title:'Specifique 10km',items:['Jeu : Fractionne 8x400m','Ven : Run long 11km','Test chrono : 5km (< 29 min)']},{n:'S5 - 09/06',title:'Affutage',items:['Jeu : 3x2km a 5:50/km','Ven : 10km confortable','Creatine 3g/jour + whey','Visualisation arrivee 10km']}]},
+  anthropic:{label:'Anthropic Academy',weeks:[{n:'S1 - 12/05',now:true,title:'Introduction IA',items:['Bases LLMs et IA generative','Prompting efficace','Cas usage mode','3 prompts reutilisables candidatures']},{n:'S2 - 19/05',title:'Prompt engineering',items:['Chain-of-thought, few-shot','Automatiser lettres de motivation','Analyser fiche de poste en 2 min','Template CV personnalise par poste']},{n:'S3 - 26/05',title:'Agents et automatisation',items:['Comprendre les agents IA','10 offres analysees en 10 min','Agent de veille LinkedIn','Suivi candidatures automatise']},{n:'S4 - 02/06',title:'IA + Data',items:['Claude + Power BI','Rapports auto depuis Excel','Nettoyer datasets mode','Dashboard enrichi IA']},{n:'S5 - 09/06',title:'Projet final',items:['Outil IA recherche emploi','Portfolio competences IA','LinkedIn : skills IA','Profil unicorn : mode + data + IA']}]},
+  couture:{label:'Couture',weeks:[{n:'S1 - 12/05',now:true,title:'Blouse projet',items:['Toile blouse Valentina','Ajustements morpho','Tissu final : lin ou popeline','Photo portfolio']},{n:'S2 - 19/05',title:'Finitions',items:['Couture blouse finale','Boutonnières, ourlets','Photo piece terminee','Prochain patron']},{n:'S3 - 26/05',title:'Nouveau projet',items:['Toile pantalon ou robe','Tissu upcycling','Partage Instagram (optionnel)']},{n:'S4 - 02/06',title:'Technique',items:['Fermeture invisible ou col tailleur','Mood board saison suivante']},{n:'S5 - 09/06',title:'Portfolio',items:['3 pieces photographiees','Portfolio PDF ou Behance','Description technique de chaque piece']}]},
+};
+var PROG_KEYS = ['data','modelisme','italien','sport','anthropic','couture'];
+var currentProg = 'data';
+
+function goPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.ntab').forEach(function(t){t.classList.remove('on');});
+  document.getElementById('panel-'+id).classList.add('on');
+  if(btn) btn.classList.add('on');
+  if(id==='programme') renderProg();
+  if(id==='cand') renderCands();
+  if(id==='sport') renderSport();
+  if(id==='prog') renderProgression();
+}
+
+function renderAll() {
+  // Header
+  var now = new Date();
+  var dl = document.getElementById('date-lbl');
+  if(dl) dl.textContent = now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+  var mq = document.getElementById('motiv-q');
+  if(mq) mq.textContent = MOTIVS[now.getDay() % MOTIVS.length];
+  var sv = document.getElementById('streak-val');
+  if(sv) sv.textContent = D.streak || 0;
+  document.getElementById('s-date').value = now.toISOString().split('T')[0];
+  document.getElementById('c-date').value = now.toISOString().split('T')[0];
+  renderMetrics();
+  renderTodaySlots();
+  renderChecks();
+  updateStreak();
+}
+
+function renderMetrics() {
+  var now = new Date();
+  var tk = todayKey();
+  var mon = new Date(now); mon.setDate(now.getDate()-(now.getDay()||7)+1); mon.setHours(0,0,0,0);
+  function parseDate(s) { if(!s) return null; var p=s.split('/'); return new Date(p[2],p[1]-1,p[0]); }
+  var todayCands = (D.candidatures||[]).filter(function(c){return c.date===tk;}).length;
+  var todayKm = (D.sport||[]).filter(function(s){return s.date===tk&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0);
+  var todayChecks = Object.values((D.checks||{})[tk]||{}).filter(Boolean).length;
+  var weekCands = (D.candidatures||[]).filter(function(c){var d=parseDate(c.date);return d&&d>=mon;}).length;
+  var weekKm = Math.round((D.sport||[]).filter(function(s){var d=parseDate(s.date);return d&&d>=mon&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0));
+  var monthCands = (D.candidatures||[]).filter(function(c){var d=parseDate(c.date);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
+  var monthKm = Math.round((D.sport||[]).filter(function(s){var d=parseDate(s.date);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()&&s.km>0;}).reduce(function(a,r){return a+(parseFloat(r.km)||0);},0));
+  var ent = (D.candidatures||[]).filter(function(c){return c.status==='entretien';}).length;
+  var mets = [
+    {l:"Candidatures auj.",v:todayCands,s:'semaine: '+weekCands+' · mois: '+monthCands+(todayCands>=2?' ✓':' · obj: 2'),cls:'acc'},
+    {l:"Sport auj.",v:todayKm>0?todayKm+'km':'—',s:'semaine: '+weekKm+'km · mois: '+monthKm+'km',cls:'acc2'},
+    {l:"Taches auj.",v:todayChecks+'/8',s:Math.round(todayChecks/8*100)+'% complete',cls:''},
+    {l:'Entretiens',v:ent,s:(D.candidatures||[]).length+' candidatures · '+D.streak+'j streak',cls:'gold'},
+  ];
+  document.getElementById('metrics').innerHTML = mets.map(function(m){
+    return '<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';
+  }).join('');
+}
+
+function renderTodaySlots() {
+  var di = todayIdx();
+  var dl = document.getElementById('day-label');
+  if(dl) dl.textContent = DLABELS[Math.min(di,6)] + ' ' + todayKey();
+  var el = document.getElementById('today-slots');
+  if(!el) return;
+  var html = '';
+  SLOTS.forEach(function(s) {
+    html += '<div class="slot">';
+    html += '<span class="slot-time">'+s.time+'</span>';
+    html += '<div>';
+    html += '<div class="slot-label'+(s.hl?' hl':'')+'">' + s.label + ' <span class="slot-sub">' + s.sub + '</span></div>';
+    html += '<div class="slot-neuro">🧠 '+s.neuro+'</div>';
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function renderChecks() {
+  var tk = todayKey();
+  if(!D.checks) D.checks = {};
+  if(!D.checks[tk]) D.checks[tk] = {};
+  var el = document.getElementById('today-checks');
+  if(!el) return;
+  var html = '';
+  TASKS.forEach(function(t) {
+    var done = !!D.checks[tk][t.id];
+    html += '<div class="ci">';
+    html += '<div class="cb' + (done?' done':'') + '" onclick="toggleCheck(\'' + tk + '\',\'' + t.id + '\')">' + (done?'✓':'') + '</div>';
+    html += '<div><div class="ci-label">'+t.label+'</div><div class="ci-sub">'+t.sub+'</div></div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+  var na = document.getElementById('note-area');
+  if(na) na.value = (D.notes||{})[tk] || '';
+}
+
+async function toggleCheck(tk, id) {
+  if(!D.checks[tk]) D.checks[tk] = {};
+  D.checks[tk][id] = !D.checks[tk][id];
+  await saveDB(); updateStreak(); renderChecks(); renderMetrics();
+}
+
+async function saveNote(v) {
+  if(!D.notes) D.notes = {};
+  D.notes[todayKey()] = v;
+  await saveDB();
+}
+
+function updateStreak() {
+  var tk = todayKey();
+  var checks = (D.checks||{})[tk] || {};
+  var done = Object.values(checks).filter(Boolean).length;
+  if(done>0 && D.lastActive!==tk) {
+    var yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    var yk = fmt(yesterday);
+    D.streak = D.lastActive===yk ? (D.streak||0)+1 : 1;
+    D.lastActive = tk;
+    saveDB();
+  }
+  var sv = document.getElementById('streak-val');
+  if(sv) sv.textContent = D.streak || 0;
+}
+
+function renderProg() {
+  document.getElementById('ptabs').innerHTML = PROG_KEYS.map(function(k){
+    return '<button class="ptab'+(k===currentProg?' on':'')+'" onclick="switchProg(\''+k+'\',this)">'+PROGS[k].label+'</button>';
+  }).join('');
+  var p = PROGS[currentProg];
+  document.getElementById('prog-body').innerHTML = '<div class="card">' +
+    p.weeks.map(function(w){
+      return '<div class="week-block'+(w.now?' now':'')+'">'+
+        '<div class="week-n">'+w.n+(w.now?'<span class="now-pill">En cours</span>':'')+'</div>'+
+        '<div class="week-title">'+w.title+'</div>'+
+        '<ul class="week-items">'+w.items.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>'+
+        '</div>';
+    }).join('') + '</div>';
+}
+function switchProg(k, btn) {
+  currentProg = k;
+  document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('on');});
+  btn.classList.add('on');
+  renderProg();
+}
+
+function renderCands() {
+  var filter = document.getElementById('cand-filter').value;
+  var cands = D.candidatures || [];
+  var filtered = filter==='all' ? cands : cands.filter(function(c){return c.status===filter;});
+  var ent = cands.filter(function(c){return c.status==='entretien';}).length;
+  document.getElementById('cand-count').textContent = cands.length + ' candidatures · ' + ent + ' entretien' + (ent>1?'s':'');
+  document.getElementById('cand-metrics').innerHTML = [
+    {l:'Total',v:cands.length,s:'depuis le debut',cls:''},
+    {l:'Entretiens',v:ent,s:'en cours',cls:'acc2'},
+    {l:'Relances',v:cands.filter(function(c){return c.status==='relance';}).length,s:'a suivre',cls:'gold'},
+    {l:'Taux',v:cands.length>0?Math.round(ent/cands.length*100)+'%':'0%',s:'entretiens/envois',cls:'acc'},
+  ].map(function(m){return '<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';}).join('');
+  document.getElementById('cand-list').innerHTML = filtered.length===0 ?
+    '<div style="font-size:13px;color:#b0a898;padding:16px 0;text-align:center">Aucune candidature</div>' :
+    [...filtered].reverse().map(function(c){
+      return '<div class="cand-item">'+
+        '<div><div class="cand-name">'+c.name+(c.poste?' <span style="font-weight:400;font-size:12px;color:#6b6456">— '+c.poste+'</span>':'')+'</div>'+
+        (c.notes?'<div class="cand-detail">'+c.notes+'</div>':'')+
+        '<div class="cand-meta">'+c.type+(c.date?' · '+c.date:'')+(c.sal?' · '+c.sal:'')+'</div></div>'+
+        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">'+
+        '<select class="status-sel s-'+c.status+'" onchange="updateCandStatus('+c.id+',this.value)">'+
+        '<option value="envoyee"'+(c.status==='envoyee'?' selected':'')+'>Envoyee</option>'+
+        '<option value="relance"'+(c.status==='relance'?' selected':'')+'>Relance</option>'+
+        '<option value="entretien"'+(c.status==='entretien'?' selected':'')+'>Entretien</option>'+
+        '<option value="refus"'+(c.status==='refus'?' selected':'')+'>Refus</option>'+
+        '</select>'+
+        '<button class="del-btn" onclick="delCand('+c.id+')">✕</button>'+
+        '</div></div>';
+    }).join('');
+}
+
+async function addCand() {
+  var name = document.getElementById('c-name').value.trim();
+  if(!name) return;
+  var maxId = (D.candidatures||[]).reduce(function(m,c){return Math.max(m,c.id||0);},0);
+  var nc = {id:maxId+1,name:name,poste:document.getElementById('c-poste').value.trim(),type:document.getElementById('c-type').value,status:'envoyee',notes:document.getElementById('c-notes').value.trim(),date:document.getElementById('c-date').value?new Date(document.getElementById('c-date').value).toLocaleDateString('fr-FR'):fmt(new Date()),sal:document.getElementById('c-sal').value.trim()};
+  if(!D.candidatures) D.candidatures = [];
+  D.candidatures.push(nc);
+  ['c-name','c-poste','c-notes','c-sal'].forEach(function(id){document.getElementById(id).value='';});
+  await saveDB(); renderCands(); renderMetrics();
+}
+async function updateCandStatus(id, status) {
+  var c = (D.candidatures||[]).find(function(x){return x.id===id;});
+  if(c){c.status=status;await saveDB();renderCands();renderMetrics();}
+}
+async function delCand(id) {
+  if(confirm('Supprimer ?')){D.candidatures=(D.candidatures||[]).filter(function(c){return c.id!==id;});await saveDB();renderCands();renderMetrics();}
+}
+
+function renderSport() {
+  var sport = D.sport || [];
+  var tkm = Math.round(sport.reduce(function(s,r){return s+(parseFloat(r.km)||0);},0));
+  var now = new Date();
+  function parseDate(s){if(!s)return null;var p=s.split('/');return new Date(p[2],p[1]-1,p[0]);}
+  var thisM = Math.round(sport.filter(function(s){var d=parseDate(s.date);return d&&d.getMonth()===now.getMonth()&&s.km>0;}).reduce(function(s,r){return s+(parseFloat(r.km)||0);},0));
+  document.getElementById('sport-metrics').innerHTML = [
+    {l:'Km total',v:tkm,s:sport.filter(function(s){return s.km>0;}).length+' seances run',cls:'acc2'},
+    {l:'Km ce mois',v:thisM,s:'objectif 100km',cls:''},
+    {l:'Seances total',v:sport.length,s:'runs + renfo',cls:''},
+    {l:'Record 10km',v:'1h22',s:'objectif : 1h00',cls:'gold'},
+  ].map(function(m){return '<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';}).join('');
+  var p10k = Math.min(sport.length*3,40);
+  document.getElementById('p10k-lbl').textContent = p10k+'%'; document.getElementById('pf-10k').style.width=p10k+'%';
+  var p6p = Math.min(sport.filter(function(s){return s.type==='Abs/Gainage'||s.type==='Renfo bas';}).length*5,100);
+  document.getElementById('p6p-lbl').textContent = p6p+'%'; document.getElementById('pf-6p').style.width=p6p+'%';
+  var pvol = Math.min(Math.round(thisM/100*100),100);
+  document.getElementById('pvol-lbl').textContent = pvol+'% ('+thisM+'/100km)'; document.getElementById('pf-vol').style.width=pvol+'%';
+  var maxKm = Math.max.apply(null, sport.filter(function(s){return s.km>0;}).map(function(s){return s.km;}).concat([1]));
+  document.getElementById('sport-list').innerHTML = [...sport].reverse().slice(0,10).map(function(s){
+    return '<div class="sport-row">'+
+      '<span class="sport-date">'+s.date+'</span>'+
+      '<div class="sport-info"><div class="sport-km">'+(s.km>0?s.km+' km':'')+' <span class="sport-type">'+s.type+'</span></div>'+(s.note?'<div style="font-size:11px;color:#b0a898">'+s.note+'</div>':'')+' </div>'+
+      (s.km>0?'<div class="sport-bar" style="width:70px"><div class="sport-fill" style="width:'+Math.round(s.km/maxKm*100)+'%"></div></div>':'')+
+      '</div>';
+  }).join('');
+}
+async function addSport() {
+  var km = parseFloat(document.getElementById('s-km').value)||0;
+  var type = document.getElementById('s-type').value;
+  var dateVal = document.getElementById('s-date').value;
+  var date = dateVal ? new Date(dateVal).toLocaleDateString('fr-FR') : fmt(new Date());
+  var note = document.getElementById('s-note').value.trim();
+  if(!D.sport) D.sport = [];
+  var maxId = (D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
+  D.sport.push({id:maxId+1,date:date,km:km,type:type,note:note});
+  document.getElementById('s-km').value=''; document.getElementById('s-note').value='';
+  await saveDB(); renderSport(); renderMetrics();
+}
+
+function renderProgression() {
+  var cands = D.candidatures||[]; var sport = D.sport||[];
+  var allC = Object.values(D.checks||{}).flatMap(function(d){return Object.values(d);});
+  var done = allC.filter(Boolean).length; var tot = allC.length;
+  var progs = [
+    {l:'Anthropic Academy',v:60,note:'S1 en cours',col:'#378ADD'},
+    {l:'Data - Power BI / SQL',v:75,note:'Module termine',col:'#7F77DD'},
+    {l:'3D / Modelisme CLO',v:30,note:'Base blouse',col:'#c8603a'},
+    {l:'Italien',v:35,note:'A2 en progression',col:'#c4973a'},
+    {l:'Candidatures',v:Math.min(Math.round(cands.length/50*100),100),note:cands.length+'/50 objectif',col:'#D85A30'},
+    {l:'Sport - 10km sous 1h',v:Math.min(sport.length*3,40),note:'Record 1h22 → 1h00',col:'#2d5a3d'},
+    {l:'6-pack',v:Math.min(sport.filter(function(s){return s.type==='Abs/Gainage'||s.type==='Renfo bas';}).length*5,100),note:'Seances renfo',col:'#c8603a'},
+    {l:'Taches quotidiennes',v:tot>0?Math.round(done/tot*100):0,note:done+'/'+tot+' cochees',col:'#1c1a16'},
+  ];
+  document.getElementById('all-prog').innerHTML = progs.map(function(p){
+    return '<div class="pw"><div class="ph"><span>'+p.l+'</span><span>'+p.note+' — <strong>'+p.v+'%</strong></span></div><div class="pbar"><div class="pfill" style="width:'+p.v+'%;background:'+p.col+'"></div></div></div>';
+  }).join('');
+  var now = new Date(); var html = '';
+  for(var i=83;i>=0;i--){
+    var d=new Date(now);d.setDate(now.getDate()-i);
+    var k=fmt(d);var checks=(D.checks||{})[k]||{};
+    var n=Object.values(checks).filter(Boolean).length;
+    var lvl=n===0?0:n<=2?1:n<=4?2:n<=6?3:4;
+    html+='<div class="hm-d'+(lvl>0?' l'+lvl:'')+'" title="'+k+' - '+n+' taches"></div>';
+  }
+  document.getElementById('heatmap').innerHTML = html;
+}
+
+// CHAT LOCAL
+function addChatMsg(role, text, isAction) {
+  var box = document.getElementById('chat-messages');
+  if(!box) return;
+  var w = document.createElement('div');
+  w.className = 'chat-msg ' + (role==='user'?'user':(isAction?'act':'bot'));
+  var b = document.createElement('div');
+  b.className = 'chat-bubble';
+  b.innerHTML = text.replace(/\n/g,'<br>');
+  w.appendChild(b); box.appendChild(w);
+  box.scrollTop = box.scrollHeight;
+}
+
+function sendChat() {
+  var inp = document.getElementById('chat-input');
+  var msg = inp.value.trim(); if(!msg) return;
+  inp.value = '';
+  addChatMsg('user', msg, false);
+  var m = msg.toLowerCase();
+  var acted = false; var response = '';
+
+  // Detecter entreprise
+  var knownCo = {ltd:'LTD',jacquemus:'Jacquemus',sandro:'Sandro',carven:'Carven',undiz:'Undiz',eres:'ERES',sintel:'Sintel',marey:'Atelier Marey',slip:'Le Slip Francais',keit:'KEIT',tequila:'Tequila',basoches:'BASOCHES',frankie:'The Frankie Shop'};
+  var foundCo = '';
+  Object.keys(knownCo).forEach(function(k){if(m.indexOf(k)>=0)foundCo=knownCo[k];});
+  if(!foundCo){var up=msg.match(/\b([A-Z][A-Z]{2,})\b/);if(up)foundCo=up[1];}
+  if(!foundCo){var ch=msg.match(/(?:chez|pour|avec)\s+([A-Z][a-zA-Z]{2,})/);if(ch)foundCo=ch[1];}
+
+  // Detecter poste
+  var poste = '';
+  var chargeM = msg.match(/(charg[e|é][e]?\s+de\s+\w+(?:\s+\w+)?)/i);
+  if(chargeM) poste = chargeM[1].trim();
+  if(!poste){var posteM=msg.match(/(?:poste|comme)\s+([^,\.]{3,35}?)(?:\s*,|\s*$)/i);if(posteM)poste=posteM[1].trim();}
+
+  // Type contrat
+  var type = 'CDI';
+  if(m.indexOf('interim')>=0||m.indexOf('intérim')>=0) type='Interim';
+  else if(m.indexOf('freelance')>=0) type='Freelance';
+  else if(m.indexOf('stage')>=0) type='Stage';
+
+  // Salaire
+  var sal = '';
+  var salM = msg.match(/(\d+[Kk](?:\s*(?:brut|net|annuel|mensuel))?)/i);
+  if(salM) sal = salM[1];
+
+  if(m.indexOf('entretien')>=0||m.indexOf('interview')>=0) {
+    var ex = (D.candidatures||[]).find(function(x){return foundCo&&x.name&&x.name.toLowerCase().indexOf(foundCo.toLowerCase())>=0;});
+    if(ex){
+      ex.status='entretien';
+      if(sal) ex.sal=sal;
+      if(poste&&!ex.poste) ex.poste=poste;
+      saveDB(); renderCands(); renderMetrics();
+      response = 'Entretien note pour <strong>'+ex.name+'</strong>'+(poste?' — '+poste:'')+' ('+ex.type+(ex.sal?' · '+ex.sal:'')+') ! Bonne chance 🤞'; setTimeout(function(){goPanel('cand',document.querySelectorAll('.ntab')[2]);},800);
+    } else {
+      var maxId = (D.candidatures||[]).reduce(function(m,c){return Math.max(m,c.id||0);},0);
+      var nc = {id:maxId+1,name:foundCo||'Entreprise',poste:poste,type:type,status:'entretien',notes:msg,date:fmt(new Date()),sal:sal};
+      if(!D.candidatures) D.candidatures=[];
+      D.candidatures.push(nc);
+      saveDB(); renderCands(); renderMetrics();
+      response = 'Entretien ajoute : <strong>'+nc.name+'</strong>'+(nc.poste?' — '+nc.poste:'')+' ('+nc.type+(sal?' · '+sal:'')+') 🤞 Je t\'ouvre les candidatures...'; setTimeout(function(){goPanel('cand',document.querySelectorAll('.ntab')[2]);},800);
+    }
+    acted = true;
+  } else if(m.indexOf('refus')>=0) {
+    var ex = (D.candidatures||[]).find(function(x){return foundCo&&x.name&&x.name.toLowerCase().indexOf(foundCo.toLowerCase())>=0;});
+    if(ex){ex.status='refus';saveDB();renderCands();renderMetrics();response='Refus note pour <strong>'+ex.name+'</strong>. La prochaine sera mieux 💪';}
+    else response = 'Entreprise non trouvee. Verifie dans Candidatures.';
+    acted = true;
+  } else if(m.indexOf('relance')>=0) {
+    var ex = (D.candidatures||[]).find(function(x){return foundCo&&x.name&&x.name.toLowerCase().indexOf(foundCo.toLowerCase())>=0;});
+    if(ex){ex.status='relance';saveDB();renderCands();renderMetrics();response='Relance notee pour <strong>'+ex.name+'</strong> 👍';acted=true;}
+  } else if(m.indexOf('candidature')>=0||m.indexOf('postul')>=0||m.indexOf('envoy')>=0) {
+    var maxId = (D.candidatures||[]).reduce(function(m,c){return Math.max(m,c.id||0);},0);
+    var nc = {id:maxId+1,name:foundCo||'?',poste:poste,type:type,status:'envoyee',notes:'',date:fmt(new Date()),sal:sal};
+    if(!D.candidatures) D.candidatures=[];
+    D.candidatures.push(nc);
+    saveDB(); renderCands(); renderMetrics();
+    response = 'Candidature ajoutee : <strong>'+nc.name+'</strong>'+(nc.poste?' — '+nc.poste:'')+' ('+nc.type+(sal?' · '+sal:'')+') 💼'; setTimeout(function(){goPanel('cand',document.querySelectorAll('.ntab')[2]);},800);
+    acted = true;
+  } else if(m.indexOf('run')>=0||m.indexOf('km')>=0||m.indexOf('couru')>=0) {
+    var kmM = msg.match(/(\d+(?:[.,]\d+)?)\s*km/i);
+    var km = kmM ? parseFloat(kmM[1].replace(',','.')) : 0;
+    var st = 'Run Z2';
+    if(m.indexOf('long')>=0) st='Run long';
+    else if(m.indexOf('fraction')>=0) st='Run fractionne';
+    var maxId = (D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
+    D.sport.push({id:maxId+1,date:fmt(new Date()),km:km,type:st,note:msg});
+    saveDB(); renderMetrics();
+    response = (km>0?km+'km ':'')+st+' ajoute ! '+(km>=8?'Excellente perf 🔥':km>=5?'Bien joue 💪':'Continue 🏃');
+    acted = true;
+  } else if(m.indexOf('renfo')>=0||m.indexOf('abs')>=0||m.indexOf('gainage')>=0||m.indexOf('muscu')>=0) {
+    var st = (m.indexOf('abs')>=0||m.indexOf('gainage')>=0) ? 'Abs/Gainage' : 'Renfo bas';
+    var maxId = (D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
+    D.sport.push({id:maxId+1,date:fmt(new Date()),km:0,type:st,note:msg});
+    saveDB(); renderMetrics();
+    response = 'Seance <strong>'+st+'</strong> ajoutee ! 💪';
+    acted = true;
+  }
+
+  if(!acted) {
+    response = foundCo ? 'Entreprise detectee: '+foundCo+'. Dis-moi: entretien, candidature ou refus?' :
+      'Essaie:<br>· "Entretien chez LTD pour chargee de production interim 45K"<br>· "Candidature Jacquemus CDI"<br>· "Refus de Carven" · "Run 8km"';
+  }
+  addChatMsg('assistant', response, acted);
+}
+
+setTimeout(function(){
+  var box = document.getElementById('chat-messages');
+  if(box && box.children.length===0) {
+    addChatMsg('assistant','Bonjour Giovana ! Dis-moi ce qui se passe — candidature, entretien, sport ? Je mets le dashboard a jour automatiquement.',false);
+  }
+},500);
+
+document.addEventListener('keydown', function(e){if(e.key==='Enter'&&e.target.id==='c-name')addCand();});
+
+loadDB();
+</script>
+</body>
+</html>
