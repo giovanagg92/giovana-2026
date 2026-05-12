@@ -198,11 +198,40 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
 .login-input:focus{border-color:#1c1a16}
 .login-btn{display:block;margin:12px auto 0;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:10px 24px;border:1px solid #1c1a16;background:#1c1a16;color:#faf9f6;cursor:pointer;border-radius:2px;width:220px}
 .login-err{font-size:12px;color:#c8603a;margin-top:8px;font-family:'DM Mono',monospace;display:none}
+
+.ical-banner{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:#1c1a16;color:#faf9f6;padding:12px 20px;border-radius:4px;display:flex;align-items:center;gap:12px;z-index:500;font-size:13px;box-shadow:0 4px 20px rgba(0,0,0,0.2);animation:slideUp .3s ease;max-width:90vw}
+@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.ical-banner button.accept{background:#2d5a3d;color:#fff;border:none;padding:6px 14px;border-radius:2px;cursor:pointer;font-family:DM Mono,monospace;font-size:11px;letter-spacing:.05em;white-space:nowrap}
+.ical-banner button.dismiss{background:none;border:1px solid rgba(255,255,255,0.3);color:#faf9f6;padding:6px 14px;border-radius:2px;cursor:pointer;font-family:DM Mono,monospace;font-size:11px;letter-spacing:.05em;white-space:nowrap}
+
+.gw-canvas{display:block}
+
+.sc{background:#fff;border:1px solid rgba(28,26,22,0.08);padding:1rem 1.25rem;margin-bottom:10px;border-radius:2px;cursor:pointer;transition:border-color .15s}
+.sc:hover{border-color:#1c1a16}
+.sc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.sc-date{font-family:'DM Mono',monospace;font-size:10px;color:#b0a898;text-transform:uppercase;letter-spacing:.06em}
+.sc-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;margin-top:2px}
+.sc-shoe{font-size:11px;color:#b0a898;font-family:'DM Mono',monospace;margin-top:2px}
+.sc-stats{display:flex;gap:20px;margin-top:10px;padding-top:8px;border-top:1px solid rgba(28,26,22,0.06)}
+.sc-sv{font-family:'Playfair Display',serif;font-size:22px;color:#1c1a16;line-height:1}
+.sc-sl{font-family:'DM Mono',monospace;font-size:9px;color:#b0a898;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.zbar{display:flex;height:7px;border-radius:99px;overflow:hidden;gap:2px;margin-top:8px}
+.zs{height:100%;border-radius:99px}
+.z1{background:#a8d4f5}.z2{background:#52b8a0}.z3{background:#f0c84b}.z4{background:#f07840}.z5{background:#e84040}
+.sc-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(28,26,22,0.06)}
+.sc-detail.on{display:block}
+.zleg{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px}
+.zl{font-family:'DM Mono',monospace;font-size:9px;color:#b0a898;display:flex;align-items:center;gap:3px}
+.zd{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.effort-lbl{display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:99px;border:1px solid rgba(28,26,22,0.15);color:#6b6456;white-space:nowrap;flex-shrink:0}
+.gpx-drop{border:2px dashed rgba(28,26,22,0.2);border-radius:4px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:10px}
+.gpx-drop:hover,.gpx-drop.drag{border-color:#1c1a16;background:#f5f4f0}
 </style>
 </head>
 <body>
 
 <div class="login-screen" id="login-screen">
+<canvas class="gw-canvas" id="gw-login" width="80" height="80" style="margin:0 auto 1.5rem;display:block"></canvas>
   <div class="login-box">
     <div class="login-title">Giovana</div>
     <div class="login-sub">Objectifs & Progression 2026</div>
@@ -320,6 +349,31 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
     <div class="card-h" id="cal-detail-title">Sélectionne un jour</div>
     <div id="cal-detail-content"><div style="font-size:13px;color:#b0a898;text-align:center;padding:1rem">Clique sur un jour pour voir les détails</div></div>
   </div>
+
+
+  <div class="card" style="margin-top:1.25rem">
+    <div class="card-h">📅 Synchronisation iCal</div>
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:#b0a898;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Exporter vers Apple Calendar</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" style="background:#2d5a3d;color:#fff;border-color:#2d5a3d;font-size:11px;padding:6px 14px" onclick="exportAllIcal()">📥 Tout</button>
+        <button class="btn" style="font-size:11px;padding:6px 14px" onclick="exportCandIcal()">📨 Candidatures</button>
+        <button class="btn" style="font-size:11px;padding:6px 14px" onclick="exportSportIcal()">🏃 Sport</button>
+        <button class="btn" style="font-size:11px;padding:6px 14px" onclick="exportPlanningIcal()">🗓 Planning</button>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(28,26,22,0.08);padding-top:1rem;margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:#b0a898;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Importer depuis Apple Calendar</div>
+      <p style="font-size:12px;color:#6b6456;margin-bottom:8px;line-height:1.6"><strong>iCal → clic droit calendrier → Partager → Copier le lien</strong><br><span style="color:#b0a898">Le calendrier doit être partagé publiquement.</span></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input id="ical-url" type="text" style="flex:1;min-width:180px;font-size:12px;padding:7px 10px;border:1px solid rgba(28,26,22,0.15);background:#f5f4f0;color:#1c1a16;font-family:inherit;outline:none;border-radius:2px" placeholder="webcal://p01-caldav.icloud.com/...">
+        <button class="btn" style="background:#1c1a16;color:#faf9f6;font-size:11px;padding:6px 14px" onclick="importFromIcal()">Importer</button>
+      </div>
+      <div id="ical-feedback" style="display:none;font-size:12px;margin-top:8px;padding:6px 10px;border-radius:2px"></div>
+    </div>
+    <div id="ical-events-list"></div>
+  </div>
+
 </div>
 
 <!-- CANDIDATURES -->
@@ -366,28 +420,44 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
 <!-- SPORT -->
 <div class="panel" id="panel-sport">
   <div class="metrics" id="sport-metrics"></div>
-  <div class="grid2">
-    <div class="card">
-      <div class="card-h">Ajouter une séance</div>
-      <div class="ar">
-        <input class="inp n" type="number" id="s-km" placeholder="km" min="0" step="0.1">
-        <select id="s-type" class="inp" style="flex:1"><option>Run Z2</option><option>Run fractionné</option><option>Run long</option><option>Renfo bas</option><option>Abs/Gainage</option><option>Marche</option><option>Repos actif</option></select>
-        <input class="inp" type="date" id="s-date" style="width:130px">
-      </div>
-      <div class="ar">
-        <input class="inp w" type="text" id="s-note" placeholder="FC moy, ressenti, allure…">
-        <button class="btn p" onclick="addSport()">+ Ajouter</button>
-      </div>
-      <div class="feedback" id="s-feedback"></div>
+  <div class="card">
+    <div class="card-h">
+      <span>Ajouter une séance</span>
+      <button class="btn sm" onclick="var z=document.getElementById('gpx-zone');z.style.display=z.style.display==='none'?'block':'none'">📂 Import GPX / CSV</button>
     </div>
-    <div class="card">
-      <div class="card-h">Objectifs sport</div>
-      <div class="pw"><div class="ph"><span>10km en moins d'1h</span><span id="p10k-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-10k" style="background:#2d5a3d"></div></div><div style="font-size:11px;color:#b0a898;margin-top:3px">Record : <strong style="color:#1c1a16">1h22</strong> → cible : <strong style="color:#2d5a3d">1h00</strong></div></div>
-      <div class="pw"><div class="ph"><span>6-pack (recomposition)</span><span id="p6p-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-6p" style="background:#c8603a"></div></div></div>
-      <div class="pw"><div class="ph"><span>Volume mensuel</span><span id="pvol-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-vol" style="background:#c4973a"></div></div></div>
+    <div id="gpx-zone" style="display:none">
+      <div class="gpx-drop" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleGpxDrop(event)">
+        <div style="font-size:28px;margin-bottom:6px">📁</div>
+        <div style="font-size:12px;color:#6b6456;font-family:'DM Mono',monospace">Glisse un fichier .gpx, .fit ou .csv<br><small style="color:#b0a898">Les données remplissent le formulaire automatiquement</small></div>
+        <input type="file" id="gpx-file" accept=".gpx,.fit,.csv" style="display:none" onchange="handleGpxFile(this)">
+        <button class="btn sm" style="margin-top:10px" onclick="document.getElementById('gpx-file').click()">Parcourir</button>
+      </div>
+      <div id="gpx-preview" style="display:none;margin-top:8px;padding:8px;background:#f5f4f0;border-radius:2px;font-size:12px;color:#6b6456;line-height:1.6"></div>
     </div>
+    <div class="ar">
+      <input class="inp n" type="number" id="s-km" placeholder="km" min="0" step="0.1">
+      <select id="s-type" class="inp" style="flex:1"><option>Run Z2</option><option>Run fractionné</option><option>Run long</option><option>Renfo bas</option><option>Abs/Gainage</option><option>Marche</option></select>
+      <input class="inp" type="date" id="s-date" style="width:130px">
+    </div>
+    <div class="ar">
+      <input class="inp" type="number" id="s-dur" placeholder="Durée (min)" style="width:110px">
+      <input class="inp" type="number" id="s-fc" placeholder="FC moy (bpm)" style="width:120px" max="250">
+      <input class="inp w" type="text" id="s-shoes" placeholder="Chaussures">
+      <input class="inp" type="text" id="s-meteo" placeholder="Météo ex: ☀️ 18°C" style="width:130px">
+    </div>
+    <div class="ar">
+      <input class="inp w" type="text" id="s-note" placeholder="Notes, ressenti…">
+      <button class="btn p" onclick="addSport()">+ Ajouter</button>
+    </div>
+    <div class="feedback" id="s-feedback"></div>
   </div>
-  <div class="card"><div class="card-h">Historique séances</div><div id="sport-list"></div></div>
+  <div class="card">
+    <div class="card-h">Objectifs</div>
+    <div class="pw"><div class="ph"><span>10km en moins d'1h</span><span id="p10k-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-10k" style="background:#2d5a3d"></div></div><div style="font-size:11px;color:#b0a898;margin-top:3px">Record : <strong style="color:#1c1a16">1h22</strong> → cible : <strong style="color:#2d5a3d">1h00</strong></div></div>
+    <div class="pw"><div class="ph"><span>6-pack</span><span id="p6p-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-6p" style="background:#c8603a"></div></div></div>
+    <div class="pw"><div class="ph"><span>Volume mensuel</span><span id="pvol-lbl"></span></div><div class="pbar"><div class="pfill" id="pf-vol" style="background:#c4973a"></div></div></div>
+  </div>
+  <div id="sport-list"></div>
 </div>
 
 <!-- PROGRAMMES -->
@@ -469,6 +539,20 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
     <div class="modal-h"><span id="modal-title">Lundi 12 mai</span><button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('on')">✕</button></div>
     <div id="modal-content"></div>
     <div style="margin-top:1rem">
+      <div class="card-h" style="margin-bottom:8px">Ajouter un événement</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <select id="modal-event-type" class="inp" style="font-size:12px;padding:5px 8px">
+          <option value="cand">📨 Candidature</option>
+          <option value="entretien">🤝 Entretien</option>
+          <option value="sport">🏃 Sport</option>
+          <option value="note">📝 Note</option>
+        </select>
+        <input class="inp w" type="text" id="modal-event-text" placeholder="Entreprise, km, texte...">
+        <button class="btn p" style="font-size:11px;padding:5px 12px" onclick="addModalEvent()">+ Ajouter</button>
+      </div>
+      <div style="font-size:11px;color:#6b6456;margin-top:6px" id="modal-event-feedback"></div>
+    </div>
+    <div style="margin-top:1rem">
       <div class="card-h" style="margin-bottom:8px">Note de ce jour</div>
       <textarea class="note-area" id="modal-note" placeholder="Ajouter une note pour ce jour…" oninput="saveModalNote(this.value)" style="margin-top:0;min-height:80px"></textarea>
     </div>
@@ -476,7 +560,46 @@ body{font-family:'DM Sans',sans-serif;background:#faf9f6;color:#1c1a16;min-heigh
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
+<script><script>
+
+// ── WIDGET G ─────────────────────────────────────────────────
+function drawGWidget(id, sz) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var ctx = el.getContext('2d');
+  if (!ctx) return;
+  var N = 12, W = sz / N, gap = Math.max(1, W * 0.2), bw = W - gap;
+  var blue = '#2A52BE';
+  ctx.clearRect(0, 0, sz, sz);
+  // Barres verticales formant G en négatif - style op-art
+  var cols = [
+    [[0.10,0.80]],
+    [[0.00,0.32],[0.62,0.32]],
+    [[0.00,0.16],[0.80,0.20]],
+    [[0.00,0.10],[0.88,0.12]],
+    [[0.00,0.08]],
+    [[0.00,0.08],[0.44,0.56]],
+    [[0.00,0.08],[0.44,0.56]],
+    [[0.00,0.10],[0.88,0.12]],
+    [[0.00,0.16],[0.80,0.20]],
+    [[0.00,0.32],[0.62,0.32]],
+    [[0.10,0.80]],
+    [[0.28,0.44]]
+  ];
+  ctx.fillStyle = blue;
+  cols.forEach(function(col, i) {
+    var x = i * W + gap / 2;
+    col.forEach(function(seg) {
+      ctx.fillRect(x, seg[0]*sz, bw, seg[1]*sz);
+    });
+  });
+}
+function initWidgets() {
+  drawGWidget('gw-login', 80);
+  drawGWidget('gw-left', 44);
+  drawGWidget('gw-right', 44);
+}
+
 var SURL = 'https://culyvwdsmpfkmpttatax.supabase.co';
 var SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bHl2d2RzbXBma21wdHRhdGF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0Nzg3OTgsImV4cCI6MjA5NDA1NDc5OH0.V_VgsigcLVWLdTETrW71Exn5njz37y-KMekK4_9-G_c';
 var sb = supabase.createClient(SURL, SKEY);
@@ -523,6 +646,7 @@ async function loadDB(){
     await saveDB();
   }
   renderAll();
+renderIcalList();
 }
 
 async function saveDB(){
@@ -546,10 +670,10 @@ function defaultCands(){return[
   {id:10,name:'Le Slip Francais',poste:'Chargee de production',type:'CDI',status:'envoyee',notes:'',date:'05/05/2026',sal:''},
 ];}
 function defaultSport(){return[
-  {id:1,date:'15/04/2026',km:7,type:'Run Z2',note:''},
-  {id:2,date:'16/04/2026',km:7,type:'Run Z2',note:''},
-  {id:3,date:'18/04/2026',km:10,type:'Run long',note:''},
-  {id:4,date:'05/05/2026',km:0,type:'Renfo bas',note:''},
+  {id:1,date:'10/05/2026',km:10.62,type:'Run long',dur:78,fc:166,shoes:'Salomon Ultra Glide 2',meteo:'☁️ 16°C',note:''},
+  {id:2,date:'06/05/2026',km:5,type:'Run Z2',dur:40,fc:143,shoes:'Salomon Ultra Glide 2',meteo:'☀️ 18°C',note:''},
+  {id:3,date:'02/05/2026',km:9.86,type:'Run long',dur:75,fc:172,shoes:'Salomon Ultra Glide 2',meteo:'🌧️ 14°C',note:''},
+  {id:4,date:'05/05/2026',km:0,type:'Renfo bas',dur:45,fc:0,shoes:'',meteo:'',note:'Squats bulgares + hip thrust'},
 ];}
 
 var MOTIVS=[
@@ -868,8 +992,15 @@ function openDayModal(dk){
     html+='</div>';
   }
   var doneC=Object.keys(checks).filter(function(k){return checks[k];}).length;
-  html+='<div style="font-size:13px;color:#6b6456;margin-bottom:12px">'+doneC+'/8 taches cochees ce jour</div>';
-  if(!cands.length&&!sports.length){html='<div style="font-size:13px;color:#b0a898;margin-bottom:12px">Aucune activite ce jour.</div>';}
+  if(doneC>0)html+='<div style="font-size:13px;color:#6b6456;margin-bottom:8px">'+doneC+'/8 taches cochees</div>';
+  if(!cands.length&&!sports.length&&!doneC){html='<div style="font-size:13px;color:#b0a898;margin-bottom:12px">Aucune activite ce jour. Ajoute un evenement ci-dessous.</div>';}
+  // Si c'est aujourd'hui, lien vers les onglets
+  if(dk===todayKey()){
+    html+='<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">';
+    if(cands.length>0)html+='<button class="btn" style="font-size:10px;padding:3px 10px" onclick="closeAndGo(3)">→ Voir Candidatures</button>';
+    if(sports.length>0)html+='<button class="btn" style="font-size:10px;padding:3px 10px" onclick="closeAndGo(4)">→ Voir Sport</button>';
+    html+='</div>';
+  }
   content.innerHTML=html;
   var mn=document.getElementById('modal-note');if(mn)mn.value=(D.notes||{})[dk]||'';
   selectedDayKey=dk;
@@ -877,6 +1008,167 @@ function openDayModal(dk){
 }
 
 function closeModal(e){if(e.target===document.getElementById('modal-overlay'))document.getElementById('modal-overlay').classList.remove('on');}
+
+
+
+// ── ICAL EXPORT ──────────────────────────────────────────────────────────
+var pendingIcalEvent = null;
+
+function showIcalBanner(event){
+  pendingIcalEvent = event;
+  var text = '';
+  if(event.type==='entretien'||event.type==='cand'){
+    text = '📅 Ajouter "'+event.name+'" à Apple Calendar ?';
+  } else if(event.type==='sport'){
+    text = '📅 Ajouter la séance sport du '+event.date+' à Apple Calendar ?';
+  } else {
+    text = '📅 Ajouter cet événement à Apple Calendar ?';
+  }
+  document.getElementById('ical-banner-text').textContent = text;
+  document.getElementById('ical-banner').style.display = 'flex';
+  setTimeout(function(){
+    document.getElementById('ical-banner').style.display='none';
+  }, 8000);
+}
+
+function formatIcalDate(dateStr, timeStr){
+  // dateStr format: DD/MM/YYYY, timeStr: "14h00" ou null
+  var parts = dateStr.split('/');
+  var y = parts[2], m = parts[1], d = parts[0];
+  if(timeStr){
+    var t = timeStr.replace('h','').replace(':','');
+    if(t.length===3)t='0'+t;
+    return y+m+d+'T'+t+'00';
+  }
+  return y+m+d;
+}
+
+function generateIcs(event){
+  var uid = 'giovana-'+Date.now()+'@giovana2026';
+  var now = new Date();
+  var stamp = now.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  var lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Giovana 2026//Dashboard//FR',
+    'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    'UID:'+uid,
+    'DTSTAMP:'+stamp,
+  ];
+
+  if(event.type==='entretien'){
+    var parts=event.date.split('/');
+    var dtstart=parts[2]+parts[1]+parts[0]+(event.time?'T'+event.time.replace('h','').padEnd(4,'0')+'00':'');
+    var dtend=parts[2]+parts[1]+parts[0]+(event.time?'T'+(parseInt(event.time)+1+'00').padStart(6,'0'):'');
+    if(event.time){
+      lines.push('DTSTART;TZID=Europe/Paris:'+dtstart);
+      lines.push('DTEND;TZID=Europe/Paris:'+dtend);
+    } else {
+      lines.push('DTSTART;VALUE=DATE:'+parts[2]+parts[1]+parts[0]);
+      lines.push('DTEND;VALUE=DATE:'+parts[2]+parts[1]+parts[0]);
+    }
+    lines.push('SUMMARY:🤝 Entretien — '+event.name+(event.poste?' ('+event.poste+')':''));
+    lines.push('DESCRIPTION:Entretien chez '+event.name+(event.notes?'\n'+event.notes:''));
+    lines.push('BEGIN:VALARM');
+    lines.push('TRIGGER:-PT1H');
+    lines.push('ACTION:DISPLAY');
+    lines.push('DESCRIPTION:Entretien dans 1h — '+event.name);
+    lines.push('END:VALARM');
+  } else if(event.type==='cand'){
+    var parts=event.date.split('/');
+    lines.push('DTSTART;VALUE=DATE:'+parts[2]+parts[1]+parts[0]);
+    lines.push('DTEND;VALUE=DATE:'+parts[2]+parts[1]+parts[0]);
+    lines.push('SUMMARY:📨 Candidature — '+event.name);
+    lines.push('DESCRIPTION:Candidature envoyée chez '+event.name+(event.poste?' pour '+event.poste:''));
+  } else if(event.type==='sport'){
+    var parts=event.date.split('/');
+    lines.push('DTSTART;VALUE=DATE:'+parts[2]+parts[1]+parts[0]);
+    lines.push('DTEND;VALUE=DATE:'+parts[2]+parts[1]+parts[0]);
+    lines.push('SUMMARY:🏃 Sport — '+(event.km>0?event.km+'km ':'')+event.stype);
+    lines.push('DESCRIPTION:'+(event.note||event.stype));
+  } else {
+    var parts=event.date.split('/');
+    lines.push('DTSTART;VALUE=DATE:'+parts[2]+parts[1]+parts[0]);
+    lines.push('DTEND;VALUE=DATE:'+parts[2]+parts[1]+parts[0]);
+    lines.push('SUMMARY:📝 '+event.name);
+    lines.push('DESCRIPTION:'+(event.note||''));
+  }
+  lines.push('END:VEVENT');
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+function exportToIcal(){
+  if(!pendingIcalEvent) return;
+  var ics = generateIcs(pendingIcalEvent);
+  var blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'giovana-evenement.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  document.getElementById('ical-banner').style.display='none';
+}
+
+function closeAndGo(tabIdx){document.getElementById("modal-overlay").classList.remove("on");var tabs=document.querySelectorAll(".ntab");if(tabs[tabIdx])tabs[tabIdx].click();}
+
+async function addModalEvent(){
+  var type = document.getElementById('modal-event-type').value;
+  var text = document.getElementById('modal-event-text').value.trim();
+  if(!text && type!=='note') return;
+  var dk = selectedDayKey;
+  if(!dk) return;
+  var fb = document.getElementById('modal-event-feedback');
+
+  if(type==='cand' || type==='entretien'){
+    var maxId=(D.candidatures||[]).reduce(function(m,c){return Math.max(m,c.id||0);},0);
+    var nc={id:maxId+1,name:text,poste:'',type:'CDI',status:type==='entretien'?'entretien':'envoyee',notes:'',date:dk,sal:'',fullnotes:''};
+    if(!D.candidatures)D.candidatures=[];
+    D.candidatures.push(nc);
+    await saveDB();
+    fb.textContent='✓ Candidature ajoutee pour le '+dk;
+    renderMetrics();
+    showIcalBanner({type:type,name:text,date:dk,poste:''});
+    openDayModal(dk);
+  } else if(type==='sport'){
+    var kmMatch=text.match(/(\d+(?:[.,]\d+)?)\s*km/i);
+    var km=kmMatch?parseFloat(kmMatch[1].replace(',','.')):0;
+    var stype='Run Z2';
+    if(text.toLowerCase().indexOf('long')>=0)stype='Run long';
+    else if(text.toLowerCase().indexOf('fraction')>=0)stype='Run fractionne';
+    else if(text.toLowerCase().indexOf('renfo')>=0)stype='Renfo bas';
+    else if(text.toLowerCase().indexOf('abs')>=0)stype='Abs/Gainage';
+    var maxId=(D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
+    D.sport.push({id:maxId+1,date:dk,km:km,type:stype,note:text});
+    await saveDB();
+    fb.textContent='✓ Sport ajoute pour le '+dk;
+    renderMetrics();
+    showIcalBanner({type:'sport',date:dk,km:km,stype:stype,note:text});
+    openDayModal(dk);
+  } else if(type==='note'){
+    if(!D.notes)D.notes={};
+    D.notes[dk]=(D.notes[dk]?D.notes[dk]+'\\n':'')+text;
+    var na=document.getElementById('modal-note');
+    if(na)na.value=D.notes[dk];
+    await saveDB();
+    fb.textContent='✓ Note ajoutee';
+  }
+
+  document.getElementById('modal-event-text').value='';
+  // Si c'est aujourd'hui, mettre à jour l'onglet aujourd'hui aussi
+  if(dk===todayKey()){
+    renderTodaySlots();
+    renderChecks();
+  }
+  // Mettre à jour le calendrier et la vue semaine
+  renderCalendrier();
+
+  setTimeout(function(){fb.textContent='';},3000);
+}
 
 async function saveModalNote(v){
   if(!D.notes)D.notes={};
@@ -930,6 +1222,8 @@ async function addCand(){
   D.candidatures.push(nc);
   ['c-name','c-poste','c-notes','c-sal'].forEach(function(id){document.getElementById(id).value='';});
   await saveDB();renderCands();renderMetrics();
+  if(nc.status==='entretien')showIcalBanner({type:'entretien',name:nc.name,date:nc.date,poste:nc.poste,notes:nc.notes});
+  else showIcalBanner({type:'cand',name:nc.name,date:nc.date,poste:nc.poste});
   var fb=document.getElementById('c-feedback');fb.textContent='✓ '+nc.name+' ajoutee !';fb.style.display='block';setTimeout(function(){fb.style.display='none';},3000);
 }
 
@@ -951,29 +1245,53 @@ async function delCand(id){
 }
 
 // SPORT
+
+function calcAllure(km,dur){if(!km||!dur||km<=0||dur<=0)return'--';var s=dur*60/km;var m=Math.floor(s/60);var sec=Math.round(s%60);return m+"'"+(sec<10?'0':'')+sec+'"';}
+function calcEffort(fc,dur){if(!fc||!dur)return 0;return Math.round((fc/180)*(dur/60)*10);}
+function getZones(fc){if(!fc||fc<100)return{z1:25,z2:45,z3:15,z4:10,z5:5};if(fc<125)return{z1:60,z2:30,z3:6,z4:3,z5:1};if(fc<140)return{z1:15,z2:62,z3:16,z4:5,z5:2};if(fc<155)return{z1:5,z2:38,z3:40,z4:14,z5:3};if(fc<168)return{z1:2,z2:10,z3:38,z4:40,z5:10};return{z1:1,z2:4,z3:18,z4:43,z5:34};}
+function effortLabel(e){return e<3?'Facile':e<6?'Modere':e<9?'Difficile':'Max';}
 function renderSport(){
   var sport=D.sport||[];
   var tkm=Math.round(sport.reduce(function(s,r){return s+(parseFloat(r.km)||0);},0));
   var now=new Date();
   var thisM=Math.round(sport.filter(function(s){var d=parseDate(s.date);return d&&d.getMonth()===now.getMonth()&&s.km>0;}).reduce(function(s,r){return s+(parseFloat(r.km)||0);},0));
+  var nbRuns=sport.filter(function(s){return s.km>0;}).length;
+  var nbRenfo=sport.filter(function(s){return !s.km||s.km===0;}).length;
   document.getElementById('sport-metrics').innerHTML=[
-    {l:'Km total',v:tkm,s:sport.filter(function(s){return s.km>0;}).length+' seances run',cls:'acc2'},
+    {l:'Km total',v:tkm,s:nbRuns+' seances run',cls:'g'},
     {l:'Km ce mois',v:thisM,s:'objectif 100km',cls:''},
-    {l:'Seances total',v:sport.length,s:'runs + renfo',cls:'gold'},
-    {l:'Record 10km',v:'1h22',s:'objectif : 1h00',cls:'acc'},
+    {l:'Seances',v:sport.length,s:nbRenfo+' renfo',cls:'a'},
+    {l:'Record 10km',v:'1h22',s:'objectif 1h00',cls:'r'},
   ].map(function(m){return'<div class="met '+m.cls+'"><div class="met-l">'+m.l+'</div><div class="met-v">'+m.v+'</div><div class="met-s">'+m.s+'</div></div>';}).join('');
-  var p10k=Math.min(sport.length*3,40);
-  document.getElementById('p10k-lbl').textContent=p10k+'%';document.getElementById('pf-10k').style.width=p10k+'%';
-  var p6p=Math.min(sport.filter(function(s){return s.type==='Abs/Gainage'||s.type==='Renfo bas';}).length*5,100);
-  document.getElementById('p6p-lbl').textContent=p6p+'%';document.getElementById('pf-6p').style.width=p6p+'%';
-  var pvol=Math.min(Math.round(thisM/100*100),100);
-  document.getElementById('pvol-lbl').textContent=pvol+'% ('+thisM+'/100km)';document.getElementById('pf-vol').style.width=pvol+'%';
-  var maxKm=Math.max.apply(null,sport.filter(function(s){return s.km>0;}).map(function(s){return s.km;}).concat([1]));
-  document.getElementById('sport-list').innerHTML=[...sport].reverse().slice(0,15).map(function(s){
-    return'<div class="sport-row"><span class="sport-date">'+s.date+'</span>'+
-      '<div class="sport-info"><div class="sport-km">'+(s.km>0?s.km+' km':'')+' <span class="sport-type">'+s.type+'</span></div>'+(s.note?'<div style="font-size:11px;color:#b0a898">'+s.note+'</div>':'')+' </div>'+
-      (s.km>0?'<div class="sport-bar"><div class="sport-fill" style="width:'+Math.round(s.km/maxKm*100)+'%"></div></div>':'')+
-      '<button class="del-btn" onclick="delSport('+s.id+')" title="Supprimer">✕</button></div>';
+  var p10=Math.min(Math.round(nbRuns/20*100),40);var e10=document.getElementById('p10k-lbl');if(e10)e10.textContent=p10+'%';var f10=document.getElementById('pf-10k');if(f10)f10.style.width=p10+'%';
+  var p6=Math.min(nbRenfo*8,100);var e6=document.getElementById('p6p-lbl');if(e6)e6.textContent=p6+'%';var f6=document.getElementById('pf-6p');if(f6)f6.style.width=p6+'%';
+  var pv=Math.min(Math.round(thisM/100*100),100);var ev=document.getElementById('pvol-lbl');if(ev)ev.textContent=pv+'% ('+thisM+'/100km)';var fv=document.getElementById('pf-vol');if(fv)fv.style.width=pv+'%';
+  var sorted=[...sport].sort(function(a,b){var da=parseDate(a.date)||new Date(0);var db=parseDate(b.date)||new Date(0);return db-da;});
+  document.getElementById('sport-list').innerHTML=sorted.map(function(s){
+    var al=calcAllure(s.km,s.dur);var ef=calcEffort(s.fc,s.dur);var zz=getZones(s.fc);var isRun=s.km>0;var elbl=ef>0?effortLabel(ef):'';
+    var detailId='scd'+s.id;
+    return'<div class="sc" onclick="var d=document.getElementById(\''+detailId+'\');if(d)d.classList.toggle(\'on\')">'
+      +'<div class="sc-head"><div style="flex:1">'
+      +'<div class="sc-date">'+s.date+(s.meteo?' &nbsp;'+s.meteo:'')+'</div>'
+      +'<div class="sc-title">'+s.type+'</div>'
+      +(s.shoes?'<div class="sc-shoe">👟 '+s.shoes+'</div>':'')
+      +(s.note?'<div style="font-size:12px;color:#6b6456;margin-top:2px">'+s.note+'</div>':'')
+      +'</div>'
+      +(ef>0?'<span class="effort-lbl">⚡ '+elbl+'</span>':'')
+      +'<button onclick="event.stopPropagation();delSport('+s.id+')" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:14px;padding:2px 6px">✕</button>'
+      +'</div>'
+      +(isRun?'<div class="sc-stats">'
+        +(s.km?'<div><div class="sc-sv">'+s.km+'</div><div class="sc-sl">km</div></div>':'')
+        +(s.dur?'<div><div class="sc-sv">'+s.dur+'</div><div class="sc-sl">min</div></div>':'')
+        +(s.dur&&s.km?'<div><div class="sc-sv">'+al+'</div><div class="sc-sl">allure</div></div>':'')
+        +(s.fc?'<div><div class="sc-sv">'+s.fc+'</div><div class="sc-sl">bpm</div></div>':'')
+        +'</div>':'')
+      +(isRun&&s.fc?'<div class="zbar"><div class="zs z1" style="flex:'+zz.z1+'"></div><div class="zs z2" style="flex:'+zz.z2+'"></div><div class="zs z3" style="flex:'+zz.z3+'"></div><div class="zs z4" style="flex:'+zz.z4+'"></div><div class="zs z5" style="flex:'+zz.z5+'"></div></div>':'')
+      +'<div class="sc-detail" id="'+detailId+'">'
+      +(isRun&&s.fc?'<div class="zleg"><span class="zl"><span class="zd z1"></span>Z1 Recup '+zz.z1+'%</span><span class="zl"><span class="zd z2"></span>Z2 Endurance '+zz.z2+'%</span><span class="zl"><span class="zd z3"></span>Z3 Aerobic '+zz.z3+'%</span><span class="zl"><span class="zd z4"></span>Z4 Seuil '+zz.z4+'%</span><span class="zl"><span class="zd z5"></span>Z5 Max '+zz.z5+'%</span></div>':'')
+      +(ef>0?'<div style="font-size:12px;color:#6b6456;margin-top:6px">Effort relatif : <strong>'+ef+'</strong> — '+elbl+'</div>':'')
+      +(s.dur&&!isRun?'<div style="font-size:12px;color:#6b6456;margin-top:4px">Duree : '+s.dur+' min</div>':'')
+      +'</div></div>';
   }).join('');
 }
 
@@ -982,13 +1300,57 @@ async function addSport(){
   var type=document.getElementById('s-type').value;
   var dateVal=document.getElementById('s-date').value;
   var date=dateVal?new Date(dateVal).toLocaleDateString('fr-FR'):fmt(new Date());
+  var dur=parseInt(document.getElementById('s-dur').value)||0;
+  var fc=parseInt(document.getElementById('s-fc').value)||0;
+  var shoes=document.getElementById('s-shoes').value.trim();
+  var meteo=document.getElementById('s-meteo').value.trim();
   var note=document.getElementById('s-note').value.trim();
   if(!D.sport)D.sport=[];
   var maxId=(D.sport||[]).reduce(function(m,s){return Math.max(m,s.id||0);},0);
-  D.sport.push({id:maxId+1,date:date,km:km,type:type,note:note});
-  document.getElementById('s-km').value='';document.getElementById('s-note').value='';
+  D.sport.push({id:maxId+1,date:date,km:km,type:type,dur:dur,fc:fc,shoes:shoes,meteo:meteo,note:note});
+  ['s-km','s-dur','s-fc','s-shoes','s-meteo','s-note'].forEach(function(id){document.getElementById(id).value='';});
+  showIcalBanner({type:'sport',date:date,km:km,stype:type});
   await saveDB();renderSport();renderMetrics();
-  var fb=document.getElementById('s-feedback');fb.textContent='✓ '+(km>0?km+'km ':'')+type+' ajoute pour le '+date;fb.style.display='block';setTimeout(function(){fb.style.display='none';},3000);
+  var fb=document.getElementById('s-feedback');fb.textContent='✓ '+(km>0?km+'km ':'')+type+' ajoutee';fb.style.display='block';setTimeout(function(){fb.style.display='none';},3000);
+}
+function handleGpxDrop(e){e.preventDefault();this.classList&&this.classList.remove('drag');var f=e.dataTransfer.files[0];if(f)processGpx(f);}
+function handleGpxFile(inp){if(inp.files[0])processGpx(inp.files[0]);}
+async function processGpx(file){
+  var prev=document.getElementById('gpx-preview');prev.style.display='block';prev.textContent='Lecture de '+file.name+'...';
+  try{
+    var txt=await file.text();var ext={km:0,dur:0,fc:0,date:fmt(new Date()),type:'Run Z2'};
+    var isCsv=file.name.toLowerCase().endsWith('.csv');
+    if(isCsv){
+      var lines=txt.split(/\r?\n/).filter(function(l){return l.trim();});
+      if(lines.length<2)throw new Error('CSV vide');
+      var headers=lines[0].split(',').map(function(h){return h.trim().toLowerCase().replace(/['"]/g,'');});
+      for(var li=1;li<Math.min(lines.length,20);li++){
+        var vals=lines[li].split(',').map(function(v){return v.trim().replace(/['"]/g,'');});
+        var row={};headers.forEach(function(h,i){row[h]=vals[i]||'';});
+        var dist=parseFloat(row['distance']||row['distance (km)']||row['distance(km)']||0);
+        if(dist>0)ext.km=Math.round(dist*100)/100;
+        var dur=row['time']||row['duration']||row['elapsed time']||'';
+        if(dur){var p=dur.split(':');if(p.length>=2)ext.dur=parseInt(p[0])*60+parseInt(p[1]);}
+        var fc=parseInt(row['avg hr']||row['average heart rate']||row['heart rate']||0);
+        if(fc>0)ext.fc=fc;
+        var ds=row['date']||row['start time']||row['activity date']||'';
+        if(ds){try{var d=new Date(ds);if(!isNaN(d))ext.date=fmt(d);}catch(e){}}
+        if(ext.km>0||ext.dur>0)break;
+      }
+    } else {
+      var hrM=txt.match(/<gpxtpx:hr>(\d+)<\/gpxtpx:hr>/g);
+      if(hrM&&hrM.length){var hrs=hrM.map(function(h){return parseInt(h.replace(/<\/?gpxtpx:hr>/g,''));});ext.fc=Math.round(hrs.reduce(function(a,b){return a+b;},0)/hrs.length);}
+      var tM=txt.match(/<time>([^<]+)<\/time>/g);
+      if(tM&&tM.length>1){var t1=new Date(tM[0].replace(/<\/?time>/g,''));var t2=new Date(tM[tM.length-1].replace(/<\/?time>/g,''));ext.dur=Math.round((t2-t1)/60000);ext.date=fmt(t1);}
+      var ptM=txt.match(/lat="([^"]+)"\s+lon="([^"]+)"/g);
+      if(ptM&&ptM.length>1){var pts=ptM.map(function(p){var m=p.match(/lat="([^"]+)"\s+lon="([^"]+)"/);return{lat:parseFloat(m[1]),lon:parseFloat(m[2])};});var d=0;for(var i=1;i<pts.length;i++){var dlat=(pts[i].lat-pts[i-1].lat)*111;var dlon=(pts[i].lon-pts[i-1].lon)*111*Math.cos(pts[i-1].lat*Math.PI/180);d+=Math.sqrt(dlat*dlat+dlon*dlon);}ext.km=Math.round(d*100)/100;}
+    }
+    if(ext.km)document.getElementById('s-km').value=ext.km;
+    if(ext.dur)document.getElementById('s-dur').value=ext.dur;
+    if(ext.fc)document.getElementById('s-fc').value=ext.fc;
+    if(ext.date){var p=ext.date.split('/');if(p.length===3)document.getElementById('s-date').value=p[2]+'-'+p[1]+'-'+p[0];}
+    prev.innerHTML='<strong>'+(isCsv?'CSV':'GPX')+' lu :</strong> '+ext.km+'km · '+ext.dur+'min · '+(ext.fc||'?')+'bpm · '+ext.date+'<br><span style="color:#2d5a3d">✓ Formulaire pre-rempli — verifie et clique Ajouter</span>';
+  }catch(err){prev.textContent='Erreur: '+err.message;}
 }
 
 async function delSport(id){
@@ -1227,7 +1589,122 @@ if(localStorage.getItem('g26_auth')==='1'){
 }
 
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.id==='c-name')addCand();});
+
+// ── ICAL ─────────────────────────────────────────────────────
+var pendingIcalEvent=null;
+function showIcalBanner(ev){
+  pendingIcalEvent=ev;
+  var txt=ev.type==='entretien'?'Ajouter entretien '+ev.name+' a iCal ?':ev.type==='cand'?'Ajouter candidature '+ev.name+' a iCal ?':'Ajouter seance sport du '+ev.date+' a iCal ?';
+  var b=document.getElementById('ical-banner');var t=document.getElementById('ical-banner-txt');
+  if(b&&t){t.textContent='📅 '+txt;b.style.display='flex';setTimeout(function(){b.style.display='none';},8000);}
+}
+function buildIcs(events){
+  var lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Giovana 2026//FR','CALSCALE:GREGORIAN'];
+  events.forEach(function(ev){
+    var uid='gio'+Date.now()+Math.random().toString(36).slice(2)+'@g26';
+    var stamp=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+    var p=(ev.date||'01/01/2026').split('/');var dt=(p[2]||'2026')+(p[1]||'01')+(p[0]||'01');
+    lines.push('BEGIN:VEVENT','UID:'+uid,'DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+dt,'DTEND;VALUE=DATE:'+dt);
+    lines.push('SUMMARY:'+(ev.summary||'Evenement'));
+    if(ev.description)lines.push('DESCRIPTION:'+ev.description.replace(/
+/g,' ').replace(/
+/g,''));
+    if(ev.alarm)lines.push('BEGIN:VALARM','TRIGGER:-PT1H','ACTION:DISPLAY','DESCRIPTION:Rappel','END:VALARM');
+    lines.push('END:VEVENT');
+  });
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+function downloadIcs(ics,fn){var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=fn||'giovana.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function exportPendingIcal(){if(!pendingIcalEvent){exportAllIcal();return;}var ev=pendingIcalEvent;var evts=[];if(ev.type==='entretien'||ev.type==='cand')evts.push({date:ev.date,summary:(ev.type==='entretien'?'Entretien':'Candidature')+' — '+(ev.name||''),alarm:ev.type==='entretien'});else evts.push({date:ev.date,summary:'Sport — '+(ev.km>0?ev.km+'km ':'')+ev.stype});if(evts.length)downloadIcs(buildIcs(evts),'giovana-evt.ics');document.getElementById('ical-banner').style.display='none';}
+function exportAllIcal(){var all=[];(D.candidatures||[]).forEach(function(c){all.push({date:c.date,summary:(c.status==='entretien'?'Entretien':'Candidature')+' — '+c.name+(c.poste?' ('+c.poste+')':''),alarm:c.status==='entretien'});});(D.sport||[]).forEach(function(s){all.push({date:s.date,summary:'Sport — '+(s.km>0?s.km+'km ':'')+s.type,description:s.note||''});});if(!all.length){alert('Aucune donnee');return;}downloadIcs(buildIcs(all),'giovana-tout.ics');}
+function exportCandIcal(){var evts=(D.candidatures||[]).map(function(c){return{date:c.date,summary:(c.status==='entretien'?'Entretien':'Candidature')+' — '+c.name,description:c.type+(c.sal?' · '+c.sal:''),alarm:c.status==='entretien'};});if(!evts.length){alert('Aucune candidature');return;}downloadIcs(buildIcs(evts),'giovana-candidatures.ics');}
+function exportSportIcal(){var evts=(D.sport||[]).map(function(s){return{date:s.date,summary:'Sport — '+(s.km>0?s.km+'km ':'')+s.type,description:s.note||''};});if(!evts.length){alert('Aucune seance');return;}downloadIcs(buildIcs(evts),'giovana-sport.ics');}
+function exportPlanningIcal(){var evts=SLOTS.map(function(s){return{date:fmt(new Date()),summary:s.label+(s.sub?' — '+s.sub:''),description:s.neuro||''};});downloadIcs(buildIcs(evts),'giovana-planning.ics');}
+async function importFromIcal(){
+  var url=document.getElementById('ical-url').value.trim();if(!url){alert('Entre une URL iCal');return;}
+  var fb=document.getElementById('ical-feedback');
+  fb.style.cssText='display:block;background:#f0efe9;color:#6b6456;padding:6px 10px;border-radius:2px';fb.textContent='Import en cours...';
+  try{
+    var r=await fetch(url.replace('webcal://','https://'));if(!r.ok)throw new Error('HTTP '+r.status);
+    var txt=await r.text();var evts=parseIcs(txt);if(!D.icalEvents)D.icalEvents=[];D.icalEvents=D.icalEvents.concat(evts);
+    await saveDB();renderCalendrier();renderIcalList();
+    fb.style.cssText='display:block;background:#E1F5EE;color:#2d5a3d;padding:6px 10px;border-radius:2px';fb.textContent='✓ '+evts.length+' evenements importes';
+  }catch(e){fb.style.cssText='display:block;background:#FAECE7;color:#c8603a;padding:6px 10px;border-radius:2px';fb.textContent='Erreur: '+e.message;}
+}
+function parseIcs(txt){
+  var evts=[];var lines=txt.split(/\r?\n/);var cur=null;
+  lines.forEach(function(l){if(l==='BEGIN:VEVENT')cur={};else if(l==='END:VEVENT'&&cur){if(cur.date)evts.push(cur);cur=null;}else if(cur){if(l.indexOf('SUMMARY:')===0)cur.title=l.slice(8);else if(l.indexOf('DTSTART')===0){var v=l.split(':')[1]||'';if(v.length>=8){var y=v.slice(0,4),m=v.slice(4,6),d=v.slice(6,8);cur.date=d+'/'+m+'/'+y;}}}});
+  return evts;
+}
+function renderIcalList(){
+  var el=document.getElementById('ical-events-list');if(!el)return;var evts=D.icalEvents||[];
+  if(!evts.length){el.innerHTML='<div style="font-size:13px;color:#b0a898">Aucun evenement importe</div>';return;}
+  el.innerHTML='<div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span style="font-family:DM Mono,monospace;font-size:11px;color:#6b6456">'+evts.length+' evenements</span><button class="btn sm" onclick="clearIcalEvts()">Effacer tout</button></div>'+
+    evts.slice(0,20).map(function(e){return'<div style="padding:6px 0;border-bottom:1px solid rgba(28,26,22,0.06);font-size:12px"><span style="font-family:DM Mono,monospace;font-size:10px;color:#2a5298">'+(e.date||'?')+'</span> '+(e.title||'Sans titre')+'</div>';}).join('')+(evts.length>20?'<div style="font-size:11px;color:#b0a898;margin-top:6px">...et '+(evts.length-20)+' autres</div>':'');
+}
+async function clearIcalEvts(){if(confirm('Effacer tout ?')){D.icalEvents=[];await saveDB();renderIcalList();renderCalendrier();}}
+
 loadDB();
-</script>
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initWidgets);}else{initWidgets();}function renderCalDetail(dk){
+  var d=parseDate(dk);if(!d)return;
+  document.getElementById('cal-detail-title').textContent=DL[(d.getDay()||7)-1]+' '+d.getDate()+' '+MOIS[d.getMonth()]+' '+d.getFullYear();
+  var cands=(D.candidatures||[]).filter(function(c){return c.date===dk;});
+  var sports=(D.sport||[]).filter(function(s){return s.date===dk;});
+  var checks=(D.checks||{})[dk]||{};
+  var icalEvts=(D.icalEvents||[]).filter(function(e){return e.date===dk;});
+  var html='';
+  if(icalEvts.length>0){
+    html+='<div style="margin-bottom:10px"><div style="font-family:DM Mono,monospace;font-size:10px;color:#2a5298;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">📅 iCal</div>';
+    icalEvts.forEach(function(e,ii){html+='<div style="font-size:13px;padding:4px 0;display:flex;justify-content:space-between"><span>'+e.title+(e.time?' · '+e.time:'')+'</span><button data-dk="'+dk+'" data-ii="'+ii+'" onclick="delIcalEvt(this.dataset.dk,parseInt(this.dataset.ii))" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:11px">✕</button></div>';});
+    html+='</div>';
+  }
+  if(cands.length>0){
+    html+='<div style="margin-bottom:10px"><div style="font-family:DM Mono,monospace;font-size:10px;color:#b0a898;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">Candidatures</div>';
+    cands.forEach(function(cx){
+      html+='<div style="padding:5px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid rgba(28,26,22,0.06)">';
+      html+='<div style="flex:1"><div style="font-size:13px;font-weight:500">'+cx.name+(cx.poste?' — '+cx.poste:'')+'</div><div style="font-size:11px;color:#b0a898;font-family:DM Mono,monospace">'+cx.type+(cx.sal?' · '+cx.sal:'')+'</div></div>';
+      html+='<select data-cid="'+cx.id+'" data-dk="'+dk+'" class="status-sel s-'+cx.status+'" onchange="updateCandStatus(parseInt(this.dataset.cid),this.value);var me=this;setTimeout(function(){renderCalDetail(me.dataset.dk)},100)">';
+      html+='<option value="envoyee"'+(cx.status==='envoyee'?' selected':'')+'>Envoyee</option>';
+      html+='<option value="relance"'+(cx.status==='relance'?' selected':'')+'>Relance</option>';
+      html+='<option value="entretien"'+(cx.status==='entretien'?' selected':'')+'>Entretien</option>';
+      html+='<option value="refus"'+(cx.status==='refus'?' selected':'')+'>Refus</option>';
+      html+='</select>';
+      html+='<button data-cid="'+cx.id+'" data-dk="'+dk+'" onclick="delCandCal(parseInt(this.dataset.cid),this.dataset.dk)" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:12px">✕</button>';
+      html+='</div>';
+    });
+    html+='</div>';
+  }
+  if(sports.length>0){
+    html+='<div style="margin-bottom:10px"><div style="font-family:DM Mono,monospace;font-size:10px;color:#b0a898;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">Sport</div>';
+    sports.forEach(function(s){html+='<div style="padding:5px 0;display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid rgba(28,26,22,0.06)"><div style="flex:1;font-size:13px">'+(s.km>0?'<strong>'+s.km+'km</strong> · ':'')+s.type+(s.meteo?' '+s.meteo:'')+(s.fc>0?' · '+s.fc+'bpm':'')+'</div><button data-sid="'+s.id+'" data-dk="'+dk+'" onclick="delSportCal(parseInt(this.dataset.sid),this.dataset.dk)" style="background:none;border:none;cursor:pointer;color:#b0a898;font-size:12px">✕</button></div>';});
+    html+='</div>';
+  }
+  var doneC=Object.keys(checks).filter(function(k){return checks[k];}).length;
+  if(doneC>0)html+='<div style="font-size:12px;color:#6b6456;margin-bottom:6px;font-family:DM Mono,monospace">'+doneC+' taches cochees</div>';
+  if(!cands.length&&!sports.length&&!doneC&&!icalEvts.length)html='<div style="font-size:13px;color:#b0a898">Aucune activite — ajoute un evenement ci-dessous.</div>';
+  document.getElementById('cal-detail-content').innerHTML=html;
+  var cn=document.getElementById('cal-note');if(cn)cn.value=(D.notes||{})[dk]||'';
+}
+async function delCandCal(id,dk){if(confirm('Supprimer ?')){D.candidatures=(D.candidatures||[]).filter(function(c){return c.id!==id;});await saveDB();renderMetrics();renderCalDetail(dk);renderCalendrier();}}
+async function delSportCal(id,dk){if(confirm('Supprimer ?')){D.sport=(D.sport||[]).filter(function(s){return s.id!==id;});await saveDB();renderMetrics();renderCalDetail(dk);renderCalendrier();}}
+async function delIcalEvt(dk,ii){var evts=(D.icalEvents||[]).filter(function(e){return e.date===dk;});var tgt=evts[ii];if(tgt){D.icalEvents=(D.icalEvents||[]).filter(function(e){return e!==tgt;});await saveDB();renderCalDetail(dk);renderCalendrier();}}
+
+
+</script></script>
+
+<!-- ICAL BANNER -->
+<div class="ical-banner" id="ical-banner" style="display:none">
+  <span id="ical-banner-text">📅 Ajouter à Apple Calendar ?</span>
+  <button class="accept" onclick="exportToIcal()">Télécharger .ics</button>
+  <button class="dismiss" onclick="document.getElementById('ical-banner').style.display='none'">Plus tard</button>
+</div>
+
+
+<div id="ical-banner" style="display:none;position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);background:#1c1a16;color:#faf9f6;padding:12px 18px;border-radius:4px;align-items:center;gap:12px;z-index:500;font-size:13px;box-shadow:0 4px 24px rgba(0,0,0,0.25);max-width:90vw">
+  <span id="ical-banner-txt">📅 Ajouter a iCal ?</span>
+  <button onclick="exportPendingIcal()" style="background:#2d5a3d;color:#fff;border:none;padding:5px 12px;border-radius:2px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;white-space:nowrap">Telecharger .ics</button>
+  <button onclick="document.getElementById('ical-banner').style.display='none'" style="background:none;border:1px solid rgba(255,255,255,.3);color:#faf9f6;padding:5px 12px;border-radius:2px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px">Plus tard</button>
+</div>
 </body>
 </html>
